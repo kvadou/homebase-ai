@@ -17,34 +17,7 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-
-function Navbar() {
-  return (
-    <nav className="fixed top-0 z-50 w-full border-b border-white/10 bg-navy-900/80 backdrop-blur-xl">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        <Link href="/" className="flex items-center gap-3">
-          <Image src="/logo.png" alt="HomeBase AI" width={40} height={40} className="rounded-lg" />
-          <span className="font-heading text-xl font-bold text-white">
-            HomeBase <span className="text-teal-400">AI</span>
-          </span>
-        </Link>
-        <div className="hidden items-center gap-8 md:flex">
-          <a href="#features" className="text-sm text-gray-300 transition-colors hover:text-white">Features</a>
-          <a href="#how-it-works" className="text-sm text-gray-300 transition-colors hover:text-white">How It Works</a>
-          <a href="#pricing" className="text-sm text-gray-300 transition-colors hover:text-white">Pricing</a>
-        </div>
-        <div className="flex items-center gap-3">
-          <Button variant="ghost" size="sm" className="text-gray-300 hover:text-white hover:bg-white/10" asChild>
-            <Link href="/sign-in">Sign In</Link>
-          </Button>
-          <Button size="sm" className="bg-teal-500 hover:bg-teal-600 text-white shadow-lg shadow-teal-500/25" asChild>
-            <Link href="/sign-up">Get Started Free</Link>
-          </Button>
-        </div>
-      </div>
-    </nav>
-  );
-}
+import { Navbar } from "@/components/marketing/navbar";
 
 function HeroSection() {
   return (
@@ -85,7 +58,7 @@ function HeroSection() {
             </Button>
           </div>
 
-          <div className="mt-12 flex items-center justify-center gap-8 text-sm text-gray-500">
+          <div className="mt-12 flex flex-col items-center justify-center gap-3 text-sm text-gray-500 sm:flex-row sm:gap-8">
             <div className="flex items-center gap-2">
               <Check className="h-4 w-4 text-teal-500" />
               No credit card required
@@ -110,9 +83,9 @@ function HeroSection() {
               <div className="h-3 w-3 rounded-full bg-green-500/80" />
               <span className="ml-4 text-xs text-gray-500">homebase-ai.com/dashboard</span>
             </div>
-            <div className="grid grid-cols-4 gap-4 p-6">
+            <div className="grid grid-cols-1 gap-4 p-4 sm:grid-cols-4 sm:p-6">
               {/* Sidebar mockup */}
-              <div className="col-span-1 space-y-3">
+              <div className="hidden space-y-3 sm:col-span-1 sm:block">
                 {["Dashboard", "Scan", "Items", "Chat", "Maintenance"].map((item) => (
                   <div key={item} className="flex items-center gap-2 rounded-lg bg-white/5 px-3 py-2 text-sm text-gray-400">
                     <div className="h-4 w-4 rounded bg-teal-500/30" />
@@ -121,8 +94,8 @@ function HeroSection() {
                 ))}
               </div>
               {/* Main content mockup */}
-              <div className="col-span-3 space-y-4">
-                <div className="grid grid-cols-3 gap-4">
+              <div className="sm:col-span-3 space-y-4">
+                <div className="grid grid-cols-3 gap-2 sm:gap-4">
                   {[
                     { label: "Total Items", value: "47", color: "teal" },
                     { label: "Maintenance Due", value: "3", color: "amber" },
@@ -528,7 +501,7 @@ function Footer() {
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
           <div className="col-span-1 lg:col-span-1">
             <div className="flex items-center gap-3">
-              <Image src="/logo.png" alt="HomeBase AI" width={32} height={32} className="rounded-lg" />
+              <Image src="/logo.png" alt="HomeBase AI" width={36} height={36} className="rounded-lg" />
               <span className="font-heading text-lg font-bold text-white">
                 HomeBase <span className="text-teal-400">AI</span>
               </span>

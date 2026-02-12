@@ -33,3 +33,7 @@ packages/database/generated/
 apps/web/public/uploads/*
 !apps/web/public/uploads/.gitkeep
 .vercel
+
+# capacitor native builds
+apps/web/ios/
+apps/web/android/

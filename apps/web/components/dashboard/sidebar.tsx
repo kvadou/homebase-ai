@@ -48,23 +48,28 @@ export function Sidebar({ open, onClose }: SidebarProps) {
       {/* Sidebar */}
       <aside
         className={cn(
-          "fixed inset-y-0 left-0 z-50 flex w-64 flex-col border-r border-[hsl(var(--sidebar-border))] bg-[hsl(var(--sidebar-background))] transition-transform duration-300 lg:static lg:translate-x-0",
+          "safe-left fixed inset-y-0 left-0 z-50 flex w-64 flex-col border-r border-[hsl(var(--sidebar-border))] bg-[hsl(var(--sidebar-background))] transition-transform duration-300 lg:static lg:translate-x-0",
           open ? "translate-x-0" : "-translate-x-full"
         )}
       >
         {/* Logo */}
-        <div className="flex h-16 items-center justify-between border-b border-[hsl(var(--sidebar-border))] px-4">
+        <div className="safe-top flex h-[4.5rem] items-center justify-between border-b border-[hsl(var(--sidebar-border))] px-4">
           <Link href="/dashboard" className="flex items-center gap-3">
             <Image
               src="/logo.png"
               alt="HomeBase AI"
-              width={32}
-              height={32}
-              className="rounded-lg"
+              width={40}
+              height={40}
+              className="rounded-lg shadow-sm"
             />
-            <span className="font-heading text-lg font-bold">
-              HomeBase <span className="text-teal-500">AI</span>
-            </span>
+            <div className="flex flex-col">
+              <span className="font-heading text-lg font-bold leading-tight">
+                HomeBase <span className="text-teal-500">AI</span>
+              </span>
+              <span className="text-[10px] font-medium tracking-wide text-[hsl(var(--muted-foreground))]">
+                Home Management
+              </span>
+            </div>
           </Link>
           <Button
             variant="ghost"
@@ -89,7 +94,7 @@ export function Sidebar({ open, onClose }: SidebarProps) {
                 href={item.href}
                 onClick={onClose}
                 className={cn(
-                  "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
+                  "flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-medium transition-colors",
                   isActive
                     ? "bg-[hsl(var(--sidebar-accent))] text-[hsl(var(--sidebar-primary))]"
                     : "text-[hsl(var(--sidebar-foreground))]/70 hover:bg-[hsl(var(--sidebar-accent))] hover:text-[hsl(var(--sidebar-foreground))]"
@@ -108,7 +113,7 @@ export function Sidebar({ open, onClose }: SidebarProps) {
         </nav>
 
         {/* Bottom */}
-        <div className="border-t border-[hsl(var(--sidebar-border))] p-4">
+        <div className="safe-bottom border-t border-[hsl(var(--sidebar-border))] p-4">
           <div className="rounded-lg bg-[hsl(var(--sidebar-accent))] p-3">
             <p className="text-xs font-medium text-[hsl(var(--sidebar-foreground))]">
               Free Plan

@@ -132,14 +132,14 @@ export function CameraViewfinder({ onCapture, onClose }: CameraViewfinderProps) 
       </div>
 
       {/* Controls */}
-      <div className="absolute bottom-0 left-0 right-0 flex items-center justify-center gap-6 bg-gradient-to-t from-black/60 to-transparent px-4 pb-4 pt-10">
+      <div className="safe-bottom absolute bottom-0 left-0 right-0 flex items-center justify-center gap-6 bg-gradient-to-t from-black/60 to-transparent px-4 pb-4 pt-10">
         <Button
           variant="ghost"
           size="icon"
-          className="h-10 w-10 rounded-full text-white hover:bg-white/20"
+          className="h-12 w-12 rounded-full text-white hover:bg-white/20"
           onClick={onClose}
         >
-          <X className="h-5 w-5" />
+          <X className="h-6 w-6" />
         </Button>
 
         <button
@@ -153,10 +153,10 @@ export function CameraViewfinder({ onCapture, onClose }: CameraViewfinderProps) 
         <Button
           variant="ghost"
           size="icon"
-          className="h-10 w-10 rounded-full text-white hover:bg-white/20"
+          className="h-12 w-12 rounded-full text-white hover:bg-white/20"
           onClick={handleSwitchCamera}
         >
-          <SwitchCamera className="h-5 w-5" />
+          <SwitchCamera className="h-6 w-6" />
         </Button>
       </div>
 

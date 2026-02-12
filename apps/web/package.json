@@ -7,10 +7,22 @@
     "build": "prisma generate --schema=../../packages/database/prisma/schema.prisma && next build",
     "start": "next start",
     "lint": "eslint .",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "cap:sync": "npx cap sync",
+    "cap:ios": "npx cap open ios",
+    "cap:android": "npx cap open android",
+    "cap:dev": "next dev & npx cap run ios --livereload --external"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^1.2.12",
+    "@capacitor/app": "^8.0.1",
+    "@capacitor/browser": "^8.0.1",
+    "@capacitor/camera": "^8.0.1",
+    "@capacitor/core": "^8.1.0",
+    "@capacitor/haptics": "^8.0.0",
+    "@capacitor/keyboard": "^8.0.0",
+    "@capacitor/splash-screen": "^8.0.1",
+    "@capacitor/status-bar": "^8.0.1",
     "@clerk/nextjs": "^6.37.0",
     "@homebase-ai/ai": "workspace:*",
     "@homebase-ai/database": "workspace:*",
@@ -39,6 +51,9 @@
     "zod": "^3.24.0"
   },
   "devDependencies": {
+    "@capacitor/android": "^8.1.0",
+    "@capacitor/cli": "^8.1.0",
+    "@capacitor/ios": "^8.1.0",
     "@tailwindcss/postcss": "^4.1.8",
     "@types/node": "^22.15.0",
     "@types/react": "^19.1.0",

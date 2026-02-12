@@ -100,6 +100,13 @@
 }
 
 @layer base {
+  :root {
+    --sat: env(safe-area-inset-top);
+    --sar: env(safe-area-inset-right);
+    --sab: env(safe-area-inset-bottom);
+    --sal: env(safe-area-inset-left);
+  }
+
   * {
     @apply border-[hsl(var(--border))];
   }
@@ -112,4 +119,32 @@
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-heading);
   }
+}
+
+/* Safe area utilities */
+.safe-top {
+  padding-top: var(--sat);
+}
+.safe-bottom {
+  padding-bottom: var(--sab);
+}
+.safe-x {
+  padding-left: var(--sal);
+  padding-right: var(--sar);
+}
+.safe-y {
+  padding-top: var(--sat);
+  padding-bottom: var(--sab);
+}
+.safe-left {
+  padding-left: var(--sal);
+}
+.safe-right {
+  padding-right: var(--sar);
+}
+
+/* Touch target minimum (Apple HIG 44x44px) */
+.touch-target {
+  min-width: 44px;
+  min-height: 44px;
 }

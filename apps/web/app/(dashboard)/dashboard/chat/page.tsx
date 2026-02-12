@@ -37,7 +37,7 @@ export default function ChatPage() {
   const [selectedHomeId, setSelectedHomeId] = React.useState<string | null>(
     null
   );
-  const [sidebarOpen, setSidebarOpen] = React.useState(true);
+  const [sidebarOpen, setSidebarOpen] = React.useState(false);
   const [homeDropdownOpen, setHomeDropdownOpen] = React.useState(false);
 
   const {
@@ -161,22 +161,48 @@ export default function ChatPage() {
     [input, handleSubmit]
   );
 
+  // Open sidebar by default on large screens
+  React.useEffect(() => {
+    const mq = window.matchMedia("(min-width: 1024px)");
+    if (mq.matches) setSidebarOpen(true);
+    const handler = (e: MediaQueryListEvent) => setSidebarOpen(e.matches);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
+
   const selectedHome = homes.find((h) => h.id === selectedHomeId);
 
   return (
-    <div className="-m-4 flex h-[calc(100vh-4rem)] sm:-m-6 lg:-m-8">
+    <div className="-m-4 flex h-[calc(100dvh-4rem)] sm:-m-6 lg:-m-8">
+      {/* Mobile overlay backdrop */}
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 z-30 bg-black/50 lg:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
       {/* Session Sidebar */}
       <div
         className={cn(
           "flex flex-col border-r border-[hsl(var(--border))] bg-[hsl(var(--background))] transition-all duration-300",
-          sidebarOpen ? "w-72" : "w-0 overflow-hidden border-r-0"
+          sidebarOpen
+            ? "fixed inset-y-0 left-0 z-40 w-72 lg:static"
+            : "w-0 overflow-hidden border-r-0"
         )}
       >
         <ChatSessionList
           sessions={sessions}
           activeSessionId={activeSessionId}
-          onSelectSession={handleSelectSession}
-          onNewChat={handleNewChat}
+          onSelectSession={(id) => {
+            handleSelectSession(id);
+            // Close sidebar on mobile after selecting
+            if (window.innerWidth < 1024) setSidebarOpen(false);
+          }}
+          onNewChat={() => {
+            handleNewChat();
+            if (window.innerWidth < 1024) setSidebarOpen(false);
+          }}
           onDeleteSession={handleDeleteSession}
         />
       </div>

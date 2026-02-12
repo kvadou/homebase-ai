@@ -13,19 +13,19 @@ export function SettingsLayout() {
       <TabsList className="mb-6 flex w-full flex-wrap gap-1 sm:inline-flex sm:w-auto">
         <TabsTrigger value="profile" className="gap-2">
           <User className="h-4 w-4" />
-          <span className="hidden sm:inline">Profile</span>
+          Profile
         </TabsTrigger>
         <TabsTrigger value="homes" className="gap-2">
           <Home className="h-4 w-4" />
-          <span className="hidden sm:inline">Homes</span>
+          Homes
         </TabsTrigger>
         <TabsTrigger value="preferences" className="gap-2">
           <Sliders className="h-4 w-4" />
-          <span className="hidden sm:inline">Preferences</span>
+          Prefs
         </TabsTrigger>
         <TabsTrigger value="account" className="gap-2">
           <Shield className="h-4 w-4" />
-          <span className="hidden sm:inline">Account</span>
+          Account
         </TabsTrigger>
       </TabsList>
 

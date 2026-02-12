@@ -7,6 +7,7 @@ import { useToast } from "@/components/ui/toaster";
 import { CameraViewfinder } from "@/components/scan/camera-viewfinder";
 import { ImageUpload } from "@/components/scan/image-upload";
 import { ScanResultCard } from "@/components/scan/scan-result-card";
+import { capturePhotoNative, pickPhotoNative } from "@/lib/camera";
 
 interface ScannedItem {
   name: string;
@@ -159,17 +160,33 @@ export default function ScanPage() {
         </p>
 
         <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-          <Button onClick={() => setMode("camera")} className="gap-2">
+          <Button
+            onClick={async () => {
+              // Try native camera first, fall back to WebRTC viewfinder
+              const nativeResult = await capturePhotoNative();
+              if (nativeResult) {
+                analyzeImage(nativeResult.base64, nativeResult.mediaType);
+              } else {
+                setMode("camera");
+              }
+            }}
+            className="gap-2"
+          >
             <Camera className="h-4 w-4" />
             Open Camera
           </Button>
           <Button
             variant="outline"
             className="gap-2"
-            onClick={() => {
-              // Trigger file input via the upload area below
-              const el = document.getElementById("scan-upload-trigger");
-              if (el) el.click();
+            onClick={async () => {
+              // Try native gallery first, fall back to file input
+              const nativeResult = await pickPhotoNative();
+              if (nativeResult) {
+                analyzeImage(nativeResult.base64, nativeResult.mediaType);
+              } else {
+                const el = document.getElementById("scan-upload-trigger");
+                if (el) el.click();
+              }
             }}
           >
             <ImagePlus className="h-4 w-4" />
