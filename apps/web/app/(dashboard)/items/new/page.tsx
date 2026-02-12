@@ -4,7 +4,16 @@ import { requireAuth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 
 interface Props {
-  searchParams: Promise<{ homeId?: string; roomId?: string }>;
+  searchParams: Promise<{
+    homeId?: string;
+    roomId?: string;
+    name?: string;
+    category?: string;
+    brand?: string;
+    model?: string;
+    condition?: string;
+    description?: string;
+  }>;
 }
 
 export default async function NewItemPage({ searchParams }: Props) {
@@ -33,6 +42,18 @@ export default async function NewItemPage({ searchParams }: Props) {
             homes={homes}
             defaultHomeId={params.homeId}
             defaultRoomId={params.roomId}
+            scanData={
+              params.name
+                ? {
+                    name: params.name,
+                    category: params.category,
+                    brand: params.brand,
+                    model: params.model,
+                    condition: params.condition,
+                    description: params.description,
+                  }
+                : undefined
+            }
           />
         </CardContent>
       </Card>

@@ -75,3 +75,140 @@ export interface ItemResponse {
     roomType: string;
   } | null;
 }
+
+// Maintenance types
+export interface MaintenanceTaskResponse {
+  id: string;
+  itemId: string;
+  title: string;
+  description: string | null;
+  frequency: string | null;
+  nextDueDate: string | null;
+  priority: string | null;
+  status: string;
+  createdAt: string;
+  updatedAt: string;
+  item?: {
+    id: string;
+    name: string;
+    category: string;
+    brand: string | null;
+    room?: { id: string; name: string } | null;
+  };
+  logs?: MaintenanceLogResponse[];
+}
+
+export interface MaintenanceLogResponse {
+  id: string;
+  taskId: string;
+  notes: string | null;
+  cost: number | null;
+  performedAt: string;
+  performedBy: string | null;
+  createdAt: string;
+}
+
+// Chat types
+export interface ChatSessionResponse {
+  id: string;
+  userId: string;
+  homeId: string | null;
+  title: string | null;
+  createdAt: string;
+  updatedAt: string;
+  messages?: ChatMessageResponse[];
+  _count?: {
+    messages: number;
+  };
+}
+
+export interface ChatMessageResponse {
+  id: string;
+  sessionId: string;
+  role: string;
+  content: string;
+  metadata: Record<string, unknown> | null;
+  createdAt: string;
+}
+
+// Manual types
+export interface ManualResponse {
+  id: string;
+  title: string;
+  brand: string | null;
+  model: string | null;
+  fileUrl: string | null;
+  sourceUrl: string | null;
+  fileType: string | null;
+  pageCount: number | null;
+  createdAt: string;
+  updatedAt: string;
+  items?: Array<{ id: string; name: string }>;
+  _count?: {
+    chunks: number;
+  };
+}
+
+// Provider types
+export interface ProviderResponse {
+  id: string;
+  name: string;
+  company: string | null;
+  specialty: string;
+  phone: string | null;
+  email: string | null;
+  website: string | null;
+  address: string | null;
+  rating: number | null;
+  reviewCount: number;
+  isVerified: boolean;
+  createdAt: string;
+  updatedAt: string;
+  reviews?: ProviderReviewResponse[];
+  availability?: ProviderAvailabilityResponse[];
+}
+
+export interface ProviderReviewResponse {
+  id: string;
+  providerId: string;
+  rating: number;
+  comment: string | null;
+  authorName: string | null;
+  createdAt: string;
+}
+
+export interface ProviderAvailabilityResponse {
+  id: string;
+  providerId: string;
+  dayOfWeek: number;
+  startTime: string;
+  endTime: string;
+}
+
+// Service request types
+export interface ServiceRequestResponse {
+  id: string;
+  homeId: string;
+  providerId: string | null;
+  title: string;
+  description: string | null;
+  status: string;
+  priority: string | null;
+  scheduledAt: string | null;
+  completedAt: string | null;
+  cost: number | null;
+  createdAt: string;
+  updatedAt: string;
+  provider?: ProviderResponse | null;
+}
+
+// Scan result type
+export interface ScanResultResponse {
+  name: string;
+  brand: string | null;
+  model: string | null;
+  category: string;
+  description: string;
+  condition: string;
+  estimatedAge: string | null;
+}

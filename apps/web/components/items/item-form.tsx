@@ -26,10 +26,20 @@ interface HomeOption {
   name: string;
 }
 
+interface ScanData {
+  name?: string;
+  category?: string;
+  brand?: string;
+  model?: string;
+  condition?: string;
+  description?: string;
+}
+
 interface ItemFormProps {
   homes: HomeOption[];
   defaultHomeId?: string;
   defaultRoomId?: string;
+  scanData?: ScanData;
   initialData?: {
     id: string;
     homeId: string;
@@ -49,7 +59,7 @@ interface ItemFormProps {
   };
 }
 
-export function ItemForm({ homes, defaultHomeId, defaultRoomId, initialData }: ItemFormProps) {
+export function ItemForm({ homes, defaultHomeId, defaultRoomId, scanData, initialData }: ItemFormProps) {
   const router = useRouter();
   const { toast } = useToast();
   const [loading, setLoading] = React.useState(false);
@@ -187,7 +197,7 @@ export function ItemForm({ homes, defaultHomeId, defaultRoomId, initialData }: I
             id="name"
             name="name"
             placeholder="e.g., Samsung Refrigerator"
-            defaultValue={initialData?.name ?? ""}
+            defaultValue={initialData?.name ?? scanData?.name ?? ""}
             required
             className="mt-1.5"
           />
@@ -195,7 +205,7 @@ export function ItemForm({ homes, defaultHomeId, defaultRoomId, initialData }: I
 
         <div>
           <Label>Category *</Label>
-          <Select name="category" defaultValue={initialData?.category ?? ""} required>
+          <Select name="category" defaultValue={initialData?.category ?? scanData?.category ?? ""} required>
             <SelectTrigger className="mt-1.5">
               <SelectValue placeholder="Select category" />
             </SelectTrigger>
@@ -211,7 +221,7 @@ export function ItemForm({ homes, defaultHomeId, defaultRoomId, initialData }: I
 
         <div>
           <Label>Condition</Label>
-          <Select name="condition" defaultValue={initialData?.condition ?? "good"}>
+          <Select name="condition" defaultValue={initialData?.condition ?? scanData?.condition ?? "good"}>
             <SelectTrigger className="mt-1.5">
               <SelectValue placeholder="Select condition" />
             </SelectTrigger>
@@ -231,7 +241,7 @@ export function ItemForm({ homes, defaultHomeId, defaultRoomId, initialData }: I
             id="brand"
             name="brand"
             placeholder="e.g., Samsung"
-            defaultValue={initialData?.brand ?? ""}
+            defaultValue={initialData?.brand ?? scanData?.brand ?? ""}
             className="mt-1.5"
           />
         </div>
@@ -242,7 +252,7 @@ export function ItemForm({ homes, defaultHomeId, defaultRoomId, initialData }: I
             id="model"
             name="model"
             placeholder="e.g., RF28R7351SR"
-            defaultValue={initialData?.model ?? ""}
+            defaultValue={initialData?.model ?? scanData?.model ?? ""}
             className="mt-1.5"
           />
         </div>
@@ -310,7 +320,7 @@ export function ItemForm({ homes, defaultHomeId, defaultRoomId, initialData }: I
             id="description"
             name="description"
             placeholder="Item description..."
-            defaultValue={initialData?.description ?? ""}
+            defaultValue={initialData?.description ?? scanData?.description ?? ""}
             className="mt-1.5"
             rows={3}
           />

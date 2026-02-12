@@ -10,6 +10,7 @@ import { requireAuth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { ITEM_CATEGORIES, ITEM_CONDITIONS } from "@homebase-ai/shared";
 import { DeleteItemButton } from "@/components/items/delete-item-button";
+import { ItemManualsSection } from "@/components/manuals/item-manuals-section";
 
 interface Props {
   params: Promise<{ itemId: string }>;
@@ -32,6 +33,15 @@ export default async function ItemDetailPage({ params }: Props) {
         take: 10,
       },
       documents: { orderBy: { createdAt: "desc" } },
+      manuals: {
+        include: {
+          manual: {
+            include: {
+              _count: { select: { chunks: true } },
+            },
+          },
+        },
+      },
     },
   });
 
@@ -128,6 +138,7 @@ export default async function ItemDetailPage({ params }: Props) {
         <TabsList>
           <TabsTrigger value="info">Info</TabsTrigger>
           <TabsTrigger value="maintenance">Maintenance</TabsTrigger>
+          <TabsTrigger value="manuals">Manuals</TabsTrigger>
           <TabsTrigger value="documents">Documents</TabsTrigger>
         </TabsList>
 
@@ -199,6 +210,26 @@ export default async function ItemDetailPage({ params }: Props) {
                   ))}
                 </div>
               )}
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="manuals">
+          <Card>
+            <CardContent className="p-6">
+              <ItemManualsSection
+                itemId={item.id}
+                manuals={item.manuals.map((im) => ({
+                  id: im.manual.id,
+                  title: im.manual.title,
+                  brand: im.manual.brand,
+                  model: im.manual.model,
+                  fileType: im.manual.fileType,
+                  pageCount: im.manual.pageCount,
+                  createdAt: im.manual.createdAt.toISOString(),
+                  _count: im.manual._count,
+                }))}
+              />
             </CardContent>
           </Card>
         </TabsContent>
