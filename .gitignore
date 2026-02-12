@@ -32,3 +32,4 @@ packages/database/generated/
 # uploads
 apps/web/public/uploads/*
 !apps/web/public/uploads/.gitkeep
+.vercel
