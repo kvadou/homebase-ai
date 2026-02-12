@@ -1,0 +1,33 @@
+{
+  "name": "homebase-ai",
+  "private": true,
+  "scripts": {
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "lint": "turbo lint",
+    "typecheck": "turbo typecheck",
+    "db:generate": "pnpm --filter @homebase-ai/database generate",
+    "db:push": "pnpm --filter @homebase-ai/database push",
+    "db:migrate": "pnpm --filter @homebase-ai/database migrate",
+    "db:seed": "pnpm --filter @homebase-ai/database seed",
+    "db:studio": "pnpm --filter @homebase-ai/database studio"
+  },
+  "devDependencies": {
+    "turbo": "^2.5.0",
+    "typescript": "^5.8.3"
+  },
+  "packageManager": "pnpm@10.12.1",
+  "engines": {
+    "node": ">=20"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@prisma/client",
+      "@prisma/engines",
+      "prisma",
+      "esbuild",
+      "@clerk/shared",
+      "sharp"
+    ]
+  }
+}
