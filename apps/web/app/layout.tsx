@@ -36,8 +36,7 @@ export default function RootLayout({
         <body
           className={`${inter.variable} ${plusJakarta.variable} ${jetbrainsMono.variable} font-sans antialiased`}
         >
-          {children}
-          <Toaster />
+          <Toaster>{children}</Toaster>
         </body>
       </html>
     </ClerkProvider>

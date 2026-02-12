@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { isPast } from "date-fns";
 import { Wrench, Plus, Loader2 } from "lucide-react";
+import { useToast } from "@/components/ui/toaster";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
@@ -28,6 +29,7 @@ interface HomeOption {
 }
 
 export default function MaintenancePage() {
+  const { toast } = useToast();
   const [tasks, setTasks] = useState<MaintenanceTaskData[]>([]);
   const [homes, setHomes] = useState<HomeOption[]>([]);
   const [loading, setLoading] = useState(true);
@@ -103,6 +105,7 @@ export default function MaintenancePage() {
       });
       const data = await res.json();
       if (data.success) {
+        toast({ title: "Task deleted", description: "Maintenance task has been removed." });
         setDeleteTask(null);
         fetchTasks();
       }

@@ -155,7 +155,7 @@ export function HomeSettings() {
             <CardDescription>Manage the homes in your inventory.</CardDescription>
           </div>
           <Button asChild className="gap-2">
-            <Link href="/dashboard/home/new">
+            <Link href="/home/new">
               <Plus className="h-4 w-4" />
               Add Home
             </Link>

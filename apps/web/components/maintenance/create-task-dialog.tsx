@@ -21,6 +21,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { MAINTENANCE_PRIORITIES } from "@homebase-ai/shared";
+import { useToast } from "@/components/ui/toaster";
 import { Loader2 } from "lucide-react";
 
 interface ItemOption {
@@ -41,6 +42,7 @@ export function CreateTaskDialog({
   onOpenChange,
   onCreated,
 }: CreateTaskDialogProps) {
+  const { toast } = useToast();
   const [items, setItems] = useState<ItemOption[]>([]);
   const [loading, setLoading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -105,6 +107,7 @@ export function CreateTaskDialog({
         return;
       }
 
+      toast({ title: "Task created", description: `"${title}" has been added.`, variant: "success" });
       resetForm();
       onOpenChange(false);
       onCreated();

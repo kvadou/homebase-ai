@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/components/ui/toaster";
 import { Loader2 } from "lucide-react";
 import type { MaintenanceTaskData } from "./maintenance-task-card";
 
@@ -29,6 +30,7 @@ export function LogCompletionDialog({
   onOpenChange,
   onLogged,
 }: LogCompletionDialogProps) {
+  const { toast } = useToast();
   const [notes, setNotes] = useState("");
   const [cost, setCost] = useState("");
   const [performedBy, setPerformedBy] = useState("");
@@ -66,6 +68,7 @@ export function LogCompletionDialog({
         return;
       }
 
+      toast({ title: "Task completed", description: "Maintenance log has been recorded.", variant: "success" });
       resetForm();
       onOpenChange(false);
       onLogged();

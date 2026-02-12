@@ -5,8 +5,6 @@ import * as ToastPrimitive from "@radix-ui/react-toast";
 import { X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const ToastProvider = ToastPrimitive.Provider;
-
 const ToastViewport = React.forwardRef<
   React.ComponentRef<typeof ToastPrimitive.Viewport>,
   React.ComponentPropsWithoutRef<typeof ToastPrimitive.Viewport>
@@ -23,7 +21,7 @@ const ToastViewport = React.forwardRef<
 ToastViewport.displayName = ToastPrimitive.Viewport.displayName;
 
 interface ToastContextValue {
-  toast: (props: { title?: string; description?: string; variant?: "default" | "destructive" }) => void;
+  toast: (props: { title?: string; description?: string; variant?: "default" | "destructive" | "success" }) => void;
 }
 
 const ToastContext = React.createContext<ToastContextValue>({
@@ -38,14 +36,14 @@ interface ToastItem {
   id: string;
   title?: string;
   description?: string;
-  variant?: "default" | "destructive";
+  variant?: "default" | "destructive" | "success";
 }
 
-export function Toaster() {
+export function Toaster({ children }: { children: React.ReactNode }) {
   const [toasts, setToasts] = React.useState<ToastItem[]>([]);
 
   const toast = React.useCallback(
-    (props: { title?: string; description?: string; variant?: "default" | "destructive" }) => {
+    (props: { title?: string; description?: string; variant?: "default" | "destructive" | "success" }) => {
       const id = Math.random().toString(36).slice(2);
       setToasts((prev) => [...prev, { id, ...props }]);
       setTimeout(() => {
@@ -57,7 +55,8 @@ export function Toaster() {
 
   return (
     <ToastContext value={{ toast }}>
-      <ToastProvider>
+      {children}
+      <ToastPrimitive.Provider>
         {toasts.map((t) => (
           <ToastPrimitive.Root
             key={t.id}
@@ -65,7 +64,9 @@ export function Toaster() {
               "group pointer-events-auto relative flex w-full items-center justify-between space-x-4 overflow-hidden rounded-lg border p-4 shadow-lg transition-all",
               t.variant === "destructive"
                 ? "border-[hsl(var(--destructive))] bg-[hsl(var(--destructive))] text-[hsl(var(--destructive-foreground))]"
-                : "border-[hsl(var(--border))] bg-[hsl(var(--background))] text-[hsl(var(--foreground))]"
+                : t.variant === "success"
+                  ? "border-teal-200 bg-teal-50 text-teal-900"
+                  : "border-[hsl(var(--border))] bg-[hsl(var(--background))] text-[hsl(var(--foreground))]"
             )}
           >
             <div className="grid gap-1">
@@ -86,7 +87,7 @@ export function Toaster() {
           </ToastPrimitive.Root>
         ))}
         <ToastViewport />
-      </ToastProvider>
+      </ToastPrimitive.Provider>
     </ToastContext>
   );
 }

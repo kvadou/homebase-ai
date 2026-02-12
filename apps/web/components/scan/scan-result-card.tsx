@@ -78,7 +78,7 @@ export function ScanResultCard({
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between">
           <div>
-            <Badge variant="outline" className="mb-2 text-teal-600 border-teal-200 bg-teal-50">
+            <Badge variant="outline" className="mb-2 text-teal-600 border-teal-200 bg-teal-50 dark:text-teal-400 dark:border-teal-800 dark:bg-teal-900/30">
               AI Identified
             </Badge>
             <CardTitle className="text-xl">{result.name}</CardTitle>

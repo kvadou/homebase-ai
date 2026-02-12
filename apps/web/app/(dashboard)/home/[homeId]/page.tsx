@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Plus, Home, Edit, Trash2, Package, DoorOpen } from "lucide-react";
+import { Plus, Home, Package, DoorOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -57,12 +57,6 @@ export default async function HomeDetailPage({ params }: Props) {
           </p>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" size="sm" asChild>
-            <Link href={`/home/${home.id}/edit`}>
-              <Edit className="h-4 w-4" />
-              Edit
-            </Link>
-          </Button>
           <DeleteHomeButton homeId={home.id} homeName={home.name} />
         </div>
       </div>

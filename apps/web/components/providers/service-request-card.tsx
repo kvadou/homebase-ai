@@ -5,8 +5,8 @@ import { cn } from "@/lib/utils";
 
 const STATUS_STYLES: Record<string, { variant: "default" | "secondary" | "destructive" | "outline" | "success" | "warning"; className?: string }> = {
   pending: { variant: "warning" },
-  scheduled: { variant: "default", className: "bg-blue-100 text-blue-800 border-transparent" },
-  in_progress: { variant: "default", className: "bg-indigo-100 text-indigo-800 border-transparent" },
+  scheduled: { variant: "default", className: "bg-blue-100 text-blue-800 border-transparent dark:bg-blue-900/30 dark:text-blue-400" },
+  in_progress: { variant: "default", className: "bg-indigo-100 text-indigo-800 border-transparent dark:bg-indigo-900/30 dark:text-indigo-400" },
   completed: { variant: "success" },
   cancelled: { variant: "secondary" },
 };

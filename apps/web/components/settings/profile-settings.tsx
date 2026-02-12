@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import { useUser } from "@clerk/nextjs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -18,11 +18,13 @@ export function ProfileSettings() {
   const [saving, setSaving] = useState(false);
   const [initialized, setInitialized] = useState(false);
 
-  if (isLoaded && !initialized && user) {
-    setFirstName(user.firstName ?? "");
-    setLastName(user.lastName ?? "");
-    setInitialized(true);
-  }
+  React.useEffect(() => {
+    if (isLoaded && !initialized && user) {
+      setFirstName(user.firstName ?? "");
+      setLastName(user.lastName ?? "");
+      setInitialized(true);
+    }
+  }, [isLoaded, initialized, user]);
 
   if (!isLoaded) {
     return (

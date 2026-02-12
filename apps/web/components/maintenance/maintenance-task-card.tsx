@@ -42,36 +42,36 @@ export interface MaintenanceTaskData {
 }
 
 const priorityConfig: Record<string, { label: string; className: string }> = {
-  urgent: { label: "Urgent", className: "bg-red-100 text-red-800 border-red-200" },
-  high: { label: "High", className: "bg-orange-100 text-orange-800 border-orange-200" },
-  medium: { label: "Medium", className: "bg-yellow-100 text-yellow-800 border-yellow-200" },
-  low: { label: "Low", className: "bg-green-100 text-green-800 border-green-200" },
+  urgent: { label: "Urgent", className: "bg-red-100 text-red-800 border-red-200 dark:bg-red-900/30 dark:text-red-400 dark:border-red-800" },
+  high: { label: "High", className: "bg-orange-100 text-orange-800 border-orange-200 dark:bg-orange-900/30 dark:text-orange-400 dark:border-orange-800" },
+  medium: { label: "Medium", className: "bg-yellow-100 text-yellow-800 border-yellow-200 dark:bg-yellow-900/30 dark:text-yellow-400 dark:border-yellow-800" },
+  low: { label: "Low", className: "bg-green-100 text-green-800 border-green-200 dark:bg-green-900/30 dark:text-green-400 dark:border-green-800" },
 };
 
 const statusConfig: Record<string, { label: string; className: string; icon: React.ReactNode }> = {
   overdue: {
     label: "Overdue",
-    className: "bg-red-100 text-red-800 border-red-200",
+    className: "bg-red-100 text-red-800 border-red-200 dark:bg-red-900/30 dark:text-red-400 dark:border-red-800",
     icon: <AlertTriangle className="h-3 w-3" />,
   },
   pending: {
     label: "Pending",
-    className: "bg-yellow-100 text-yellow-800 border-yellow-200",
+    className: "bg-yellow-100 text-yellow-800 border-yellow-200 dark:bg-yellow-900/30 dark:text-yellow-400 dark:border-yellow-800",
     icon: <Clock className="h-3 w-3" />,
   },
   in_progress: {
     label: "In Progress",
-    className: "bg-blue-100 text-blue-800 border-blue-200",
+    className: "bg-blue-100 text-blue-800 border-blue-200 dark:bg-blue-900/30 dark:text-blue-400 dark:border-blue-800",
     icon: <Wrench className="h-3 w-3" />,
   },
   completed: {
     label: "Completed",
-    className: "bg-green-100 text-green-800 border-green-200",
+    className: "bg-green-100 text-green-800 border-green-200 dark:bg-green-900/30 dark:text-green-400 dark:border-green-800",
     icon: <CheckCircle2 className="h-3 w-3" />,
   },
   skipped: {
     label: "Skipped",
-    className: "bg-gray-100 text-gray-600 border-gray-200",
+    className: "bg-gray-100 text-gray-600 border-gray-200 dark:bg-gray-800/30 dark:text-gray-400 dark:border-gray-700",
     icon: <SkipForward className="h-3 w-3" />,
   },
 };
@@ -102,7 +102,7 @@ export function MaintenanceTaskCard({
     <Card
       className={cn(
         "group relative cursor-pointer p-4 transition-all hover:shadow-md",
-        isOverdue && "border-red-300"
+        isOverdue && "border-red-300 dark:border-red-800"
       )}
       onClick={() => onClick(task)}
     >

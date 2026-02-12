@@ -19,6 +19,7 @@ export async function GET(req: NextRequest) {
         ...(category && { category }),
       },
       include: {
+        home: { select: { id: true, name: true } },
         room: { select: { id: true, name: true, roomType: true } },
       },
       orderBy: { createdAt: "desc" },
