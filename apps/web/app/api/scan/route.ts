@@ -1,10 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireAuth } from "@/lib/auth";
 import { analyzeItemImage } from "@homebase-ai/ai/vision";
+import { canUseScan, recordScanUsage } from "@/lib/plan-limits";
 
 export async function POST(request: NextRequest) {
   try {
-    await requireAuth();
+    const user = await requireAuth();
+
+    // Check plan limits
+    const allowed = await canUseScan(user.id);
+    if (!allowed) {
+      return NextResponse.json(
+        { success: false, error: "Plan limit reached", code: "PLAN_LIMIT" },
+        { status: 402 }
+      );
+    }
 
     const body = await request.json();
     const { image, mediaType } = body as {
@@ -34,6 +44,9 @@ export async function POST(request: NextRequest) {
       : "image/jpeg";
 
     const data = await analyzeItemImage(image, resolvedMediaType);
+
+    // Record scan usage for plan limit tracking
+    await recordScanUsage(user.id);
 
     return NextResponse.json({ success: true, data });
   } catch (error) {

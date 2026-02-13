@@ -5,6 +5,7 @@ import {
   ArrowLeft,
   Building2,
   CheckCircle,
+  Crown,
   Globe,
   Mail,
   MapPin,
@@ -12,10 +13,13 @@ import {
   Phone,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { RatingStars } from "./rating-stars";
 import { ReviewList } from "./review-list";
 import { CreateReviewDialog } from "./create-review-dialog";
+import { ClaimProviderButton } from "./claim-provider-button";
+import { ConnectStripeButton } from "./connect-stripe-button";
 
 interface Review {
   id: string;
@@ -44,6 +48,10 @@ interface Provider {
   rating: number | null;
   reviewCount: number;
   isVerified: boolean;
+  featured?: boolean;
+  isClaimable?: boolean;
+  claimedByUserId?: string | null;
+  stripeConnectId?: string | null;
   reviews: Review[];
   availability: Availability[];
 }
@@ -54,10 +62,14 @@ interface ProviderDetailProps {
   provider: Provider;
   onBack: () => void;
   onRefresh: () => void;
+  currentUserId?: string | null;
 }
 
-export function ProviderDetail({ provider, onBack, onRefresh }: ProviderDetailProps) {
+export function ProviderDetail({ provider, onBack, onRefresh, currentUserId }: ProviderDetailProps) {
   const [reviewDialogOpen, setReviewDialogOpen] = React.useState(false);
+
+  const isClaimedByCurrentUser =
+    currentUserId != null && provider.claimedByUserId === currentUserId;
 
   return (
     <div className="space-y-6">
@@ -79,6 +91,12 @@ export function ProviderDetail({ provider, onBack, onRefresh }: ProviderDetailPr
           {provider.isVerified && (
             <CheckCircle className="h-5 w-5 text-teal-500" />
           )}
+          {provider.featured && (
+            <Badge className="gap-1 border-transparent bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400">
+              <Crown className="h-3 w-3" />
+              Featured
+            </Badge>
+          )}
         </div>
         {provider.company && (
           <div className="mt-1 flex items-center gap-1.5 text-[hsl(var(--muted-foreground))]">
@@ -92,6 +110,27 @@ export function ProviderDetail({ provider, onBack, onRefresh }: ProviderDetailPr
             {provider.rating?.toFixed(1) ?? "0.0"} ({provider.reviewCount}{" "}
             {provider.reviewCount === 1 ? "review" : "reviews"})
           </span>
+        </div>
+
+        {/* Marketplace Actions */}
+        <div className="mt-3 flex flex-wrap gap-2">
+          <ClaimProviderButton
+            providerId={provider.id}
+            isClaimable={provider.isClaimable ?? false}
+            claimedByUserId={provider.claimedByUserId ?? null}
+            onClaimed={onRefresh}
+          />
+          <ConnectStripeButton
+            providerId={provider.id}
+            claimedByCurrentUser={isClaimedByCurrentUser}
+            hasStripeConnect={!!provider.stripeConnectId}
+          />
+          {isClaimedByCurrentUser && provider.stripeConnectId && (
+            <Badge variant="success" className="gap-1">
+              <CheckCircle className="h-3 w-3" />
+              Stripe Connected
+            </Badge>
+          )}
         </div>
       </div>
 

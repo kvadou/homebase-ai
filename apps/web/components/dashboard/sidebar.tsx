@@ -9,13 +9,18 @@ import {
   Package,
   MessageSquare,
   Wrench,
+  Shield,
+  BarChart3,
   Users,
   Settings,
+  FileText,
+  CreditCard,
   X,
   Menu,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { SidebarPlanIndicator } from "./sidebar-plan-indicator";
 
 const navItems = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -23,7 +28,11 @@ const navItems = [
   { href: "/items", label: "Items", icon: Package },
   { href: "/dashboard/chat", label: "Chat", icon: MessageSquare },
   { href: "/dashboard/maintenance", label: "Maintenance", icon: Wrench },
+  { href: "/dashboard/warranties", label: "Warranties", icon: Shield },
+  { href: "/dashboard/analytics", label: "Analytics", icon: BarChart3 },
+  { href: "/dashboard/passport", label: "Passport", icon: FileText },
   { href: "/dashboard/providers", label: "Providers", icon: Users },
+  { href: "/dashboard/billing", label: "Billing", icon: CreditCard },
   { href: "/dashboard/settings", label: "Settings", icon: Settings },
 ];
 
@@ -114,17 +123,7 @@ export function Sidebar({ open, onClose }: SidebarProps) {
 
         {/* Bottom */}
         <div className="safe-bottom border-t border-[hsl(var(--sidebar-border))] p-4">
-          <div className="rounded-lg bg-[hsl(var(--sidebar-accent))] p-3">
-            <p className="text-xs font-medium text-[hsl(var(--sidebar-foreground))]">
-              Free Plan
-            </p>
-            <p className="mt-1 text-xs text-[hsl(var(--muted-foreground))]">
-              3 of 25 items used
-            </p>
-            <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-[hsl(var(--sidebar-border))]">
-              <div className="h-full w-[12%] rounded-full bg-teal-500" />
-            </div>
-          </div>
+          <SidebarPlanIndicator />
         </div>
       </aside>
     </>

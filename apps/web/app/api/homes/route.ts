@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { requireAuth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { createHomeSchema } from "@homebase-ai/shared";
+import { canCreateHome } from "@/lib/plan-limits";
 
 export async function GET() {
   try {
@@ -29,6 +30,16 @@ export async function GET() {
 export async function POST(req: NextRequest) {
   try {
     const user = await requireAuth();
+
+    // Check plan limits
+    const allowed = await canCreateHome(user.id);
+    if (!allowed) {
+      return NextResponse.json(
+        { success: false, error: "Plan limit reached", code: "PLAN_LIMIT" },
+        { status: 402 }
+      );
+    }
+
     const body = await req.json();
 
     const parsed = createHomeSchema.safeParse(body);

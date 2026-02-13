@@ -3,6 +3,8 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { Inter, Plus_Jakarta_Sans, JetBrains_Mono } from "next/font/google";
 import { Toaster } from "@/components/ui/toaster";
 import { CapacitorProvider } from "@/components/capacitor-provider";
+import { ThemeProvider } from "@/components/theme-provider";
+import { ThemeScript } from "@/components/theme-script";
 import "./globals.css";
 
 const inter = Inter({
@@ -63,12 +65,17 @@ export default function RootLayout({
   return (
     <ClerkProvider dynamic>
       <html lang="en" suppressHydrationWarning>
+        <head>
+          <ThemeScript />
+        </head>
         <body
           className={`${inter.variable} ${plusJakarta.variable} ${jetbrainsMono.variable} font-sans antialiased`}
         >
-          <CapacitorProvider>
-            <Toaster>{children}</Toaster>
-          </CapacitorProvider>
+          <ThemeProvider>
+            <CapacitorProvider>
+              <Toaster>{children}</Toaster>
+            </CapacitorProvider>
+          </ThemeProvider>
         </body>
       </html>
     </ClerkProvider>

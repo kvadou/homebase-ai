@@ -5,7 +5,7 @@ import { createProviderSchema } from "@homebase-ai/shared";
 
 export async function GET(req: NextRequest) {
   try {
-    await requireAuth();
+    const user = await requireAuth();
 
     const { searchParams } = new URL(req.url);
     const specialty = searchParams.get("specialty");
@@ -26,10 +26,14 @@ export async function GET(req: NextRequest) {
 
     const providers = await prisma.providerProfile.findMany({
       where,
-      orderBy: [{ rating: "desc" }, { reviewCount: "desc" }],
+      orderBy: [{ featured: "desc" }, { rating: "desc" }, { reviewCount: "desc" }],
     });
 
-    return NextResponse.json({ success: true, data: providers });
+    return NextResponse.json({
+      success: true,
+      data: providers,
+      meta: { currentUserId: user.id },
+    });
   } catch {
     return NextResponse.json(
       { success: false, error: "Unauthorized" },

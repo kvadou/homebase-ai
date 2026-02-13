@@ -23,6 +23,10 @@ interface Provider {
   rating: number | null;
   reviewCount: number;
   isVerified: boolean;
+  featured: boolean;
+  isClaimable: boolean;
+  claimedByUserId: string | null;
+  stripeConnectId: string | null;
 }
 
 interface ProviderWithDetails extends Provider {
@@ -70,6 +74,7 @@ export default function ProvidersPage() {
   const [selectedProvider, setSelectedProvider] = React.useState<ProviderWithDetails | null>(null);
   const [createProviderOpen, setCreateProviderOpen] = React.useState(false);
   const [createRequestOpen, setCreateRequestOpen] = React.useState(false);
+  const [currentUserId, setCurrentUserId] = React.useState<string | null>(null);
 
   const fetchProviders = React.useCallback(async () => {
     try {
@@ -81,6 +86,9 @@ export default function ProvidersPage() {
       const data = await res.json();
       if (data.success) {
         setProviders(data.data);
+        if (data.meta?.currentUserId) {
+          setCurrentUserId(data.meta.currentUserId);
+        }
       }
     } catch {
       // silently fail
@@ -159,6 +167,7 @@ export default function ProvidersPage() {
           provider={selectedProvider}
           onBack={() => setSelectedProvider(null)}
           onRefresh={handleRefreshProvider}
+          currentUserId={currentUserId}
         />
       </div>
     );
@@ -244,6 +253,8 @@ export default function ProvidersPage() {
                   key={provider.id}
                   provider={provider}
                   onClick={handleSelectProvider}
+                  currentUserId={currentUserId}
+                  onClaimed={fetchProviders}
                 />
               ))}
             </div>

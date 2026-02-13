@@ -19,8 +19,13 @@ model User {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  homes        HomeUser[]
-  chatSessions ChatSession[]
+  calendarToken String?  @unique @map("calendar_token")
+
+  homes             HomeUser[]
+  chatSessions      ChatSession[]
+  notifications     Notification[]
+  pushSubscriptions PushSubscription[]
+  subscription      Subscription?
 
   @@map("users")
 }
@@ -47,6 +52,7 @@ model Home {
   chatSessions    ChatSession[]
   serviceRequests ServiceRequest[]
   homePassport    HomePassport?
+  invitations     HomeInvitation[]
 
   @@map("homes")
 }
@@ -93,11 +99,17 @@ model Item {
   modelNumber     String?  @map("model_number")
   purchaseDate    DateTime? @map("purchase_date")
   purchasePrice   Float?    @map("purchase_price")
-  warrantyExpiry  DateTime? @map("warranty_expiry")
-  condition       String?   @default("good")
+  warrantyExpiry   DateTime? @map("warranty_expiry")
+  warrantyProvider String?   @map("warranty_provider")
+  warrantyType     String?   @map("warranty_type")
+  warrantyNotes    String?   @map("warranty_notes")
+  condition        String?   @default("good")
   description     String?
   photoUrl        String?   @map("photo_url")
   notes           String?
+  smartDeviceId       String?   @map("smart_device_id")
+  smartDeviceType     String?   @map("smart_device_type")
+  smartDeviceMetadata Json?     @map("smart_device_metadata")
   createdAt       DateTime  @default(now()) @map("created_at")
   updatedAt       DateTime  @updatedAt @map("updated_at")
 
@@ -231,19 +243,24 @@ model ChatMessage {
 }
 
 model ProviderProfile {
-  id           String   @id @default(cuid())
-  name         String
-  company      String?
-  specialty    String
-  phone        String?
-  email        String?
-  website      String?
-  address      String?
-  rating       Float?   @default(0)
-  reviewCount  Int      @default(0) @map("review_count")
-  isVerified   Boolean  @default(false) @map("is_verified")
-  createdAt    DateTime @default(now()) @map("created_at")
-  updatedAt    DateTime @updatedAt @map("updated_at")
+  id              String   @id @default(cuid())
+  name            String
+  company         String?
+  specialty       String
+  phone           String?
+  email           String?
+  website         String?
+  address         String?
+  rating          Float?   @default(0)
+  reviewCount     Int      @default(0) @map("review_count")
+  isVerified      Boolean  @default(false) @map("is_verified")
+  stripeConnectId String?  @map("stripe_connect_id")
+  isClaimable     Boolean  @default(true) @map("is_claimable")
+  claimedByUserId String?  @map("claimed_by_user_id")
+  commissionRate  Float?   @default(0.10) @map("commission_rate")
+  featured        Boolean  @default(false)
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
 
   reviews        ProviderReview[]
   availability   ProviderAvailability[]
@@ -253,18 +270,22 @@ model ProviderProfile {
 }
 
 model ServiceRequest {
-  id          String   @id @default(cuid())
-  homeId      String   @map("home_id")
-  providerId  String?  @map("provider_id")
-  title       String
-  description String?
-  status      String   @default("pending")
-  priority    String?  @default("medium")
-  scheduledAt DateTime? @map("scheduled_at")
-  completedAt DateTime? @map("completed_at")
-  cost        Float?
-  createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @updatedAt @map("updated_at")
+  id               String    @id @default(cuid())
+  homeId           String    @map("home_id")
+  providerId       String?   @map("provider_id")
+  title            String
+  description      String?
+  status           String    @default("pending")
+  priority         String?   @default("medium")
+  scheduledAt      DateTime? @map("scheduled_at")
+  completedAt      DateTime? @map("completed_at")
+  cost             Float?
+  commissionRate   Float?    @map("commission_rate")
+  commissionAmount Float?    @map("commission_amount")
+  paymentStatus    String?   @map("payment_status")
+  stripePaymentId  String?   @map("stripe_payment_id")
+  createdAt        DateTime  @default(now()) @map("created_at")
+  updatedAt        DateTime  @updatedAt @map("updated_at")
 
   home     Home             @relation(fields: [homeId], references: [id], onDelete: Cascade)
   provider ProviderProfile? @relation(fields: [providerId], references: [id], onDelete: SetNull)
@@ -328,13 +349,87 @@ model Part {
 }
 
 model HomePassport {
-  id        String   @id @default(cuid())
-  homeId    String   @unique @map("home_id")
-  data      Json     @default("{}")
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  id             String    @id @default(cuid())
+  homeId         String    @unique @map("home_id")
+  data           Json      @default("{}")
+  generatedAt    DateTime? @map("generated_at")
+  shareToken     String?   @unique @map("share_token")
+  shareExpiresAt DateTime? @map("share_expires_at")
+  isPublic       Boolean   @default(false) @map("is_public")
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
 
   home Home @relation(fields: [homeId], references: [id], onDelete: Cascade)
 
   @@map("home_passports")
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String   @map("user_id")
+  type      String
+  title     String
+  body      String
+  link      String?
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, read])
+  @@index([userId, createdAt])
+  @@map("notifications")
+}
+
+model HomeInvitation {
+  id        String   @id @default(cuid())
+  homeId    String   @map("home_id")
+  email     String
+  role      String   @default("editor")
+  token     String   @unique
+  status    String   @default("pending")
+  invitedBy String   @map("invited_by")
+  expiresAt DateTime @map("expires_at")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  home Home @relation(fields: [homeId], references: [id], onDelete: Cascade)
+
+  @@index([email, status])
+  @@index([token])
+  @@map("home_invitations")
+}
+
+model PushSubscription {
+  id       String @id @default(cuid())
+  userId   String @map("user_id")
+  endpoint String @unique
+  p256dh   String
+  auth     String
+  platform String? @default("web")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("push_subscriptions")
+}
+
+model Subscription {
+  id                    String    @id @default(cuid())
+  userId                String    @unique @map("user_id")
+  stripeCustomerId      String?   @unique @map("stripe_customer_id")
+  stripeSubscriptionId  String?   @unique @map("stripe_subscription_id")
+  stripePriceId         String?   @map("stripe_price_id")
+  plan                  String    @default("free")
+  status                String    @default("active")
+  currentPeriodStart    DateTime? @map("current_period_start")
+  currentPeriodEnd      DateTime? @map("current_period_end")
+  cancelAtPeriodEnd     Boolean   @default(false) @map("cancel_at_period_end")
+  createdAt             DateTime  @default(now()) @map("created_at")
+  updatedAt             DateTime  @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([stripeCustomerId])
+  @@map("subscriptions")
 }

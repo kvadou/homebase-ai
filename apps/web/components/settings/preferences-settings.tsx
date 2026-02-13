@@ -14,11 +14,11 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/components/ui/toaster";
 import { Loader2, Moon, Sun, Monitor } from "lucide-react";
+import { useTheme } from "@/components/theme-provider";
 
 type Theme = "light" | "dark" | "system";
 
 interface Preferences {
-  theme: Theme;
   defaultHomeId: string;
   emailNotifications: boolean;
   maintenanceReminders: boolean;
@@ -26,7 +26,6 @@ interface Preferences {
 }
 
 const DEFAULT_PREFS: Preferences = {
-  theme: "system",
   defaultHomeId: "",
   emailNotifications: true,
   maintenanceReminders: true,
@@ -40,6 +39,7 @@ interface HomeOption {
 
 export function PreferencesSettings() {
   const { toast } = useToast();
+  const { theme, setTheme } = useTheme();
   const [prefs, setPrefs] = useState<Preferences>(DEFAULT_PREFS);
   const [homes, setHomes] = useState<HomeOption[]>([]);
   const [loading, setLoading] = useState(true);
@@ -72,24 +72,12 @@ export function PreferencesSettings() {
   function savePrefs(updated: Preferences) {
     setPrefs(updated);
     localStorage.setItem("homebase-preferences", JSON.stringify(updated));
-    applyTheme(updated.theme);
     toast({ title: "Preferences saved" });
   }
 
-  function applyTheme(theme: Theme) {
-    const root = document.documentElement;
-    if (theme === "dark") {
-      root.classList.add("dark");
-    } else if (theme === "light") {
-      root.classList.remove("dark");
-    } else {
-      // system
-      if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-        root.classList.add("dark");
-      } else {
-        root.classList.remove("dark");
-      }
-    }
+  function handleThemeChange(newTheme: Theme) {
+    setTheme(newTheme);
+    toast({ title: "Theme updated" });
   }
 
   if (loading) {
@@ -113,14 +101,14 @@ export function PreferencesSettings() {
           <div className="space-y-3">
             <Label>Theme</Label>
             <div className="grid grid-cols-3 gap-3">
-              {(["light", "dark", "system"] as Theme[]).map((theme) => {
+              {(["light", "dark", "system"] as Theme[]).map((t) => {
                 const icons = { light: Sun, dark: Moon, system: Monitor };
-                const Icon = icons[theme];
-                const isActive = prefs.theme === theme;
+                const Icon = icons[t];
+                const isActive = theme === t;
                 return (
                   <button
-                    key={theme}
-                    onClick={() => savePrefs({ ...prefs, theme })}
+                    key={t}
+                    onClick={() => handleThemeChange(t)}
                     className={`flex flex-col items-center gap-2 rounded-lg border-2 p-4 transition-colors ${
                       isActive
                         ? "border-teal-500 bg-teal-500/5"
@@ -129,7 +117,7 @@ export function PreferencesSettings() {
                   >
                     <Icon className={`h-5 w-5 ${isActive ? "text-teal-500" : "text-[hsl(var(--muted-foreground))]"}`} />
                     <span className={`text-sm capitalize ${isActive ? "font-medium text-teal-500" : "text-[hsl(var(--muted-foreground))]"}`}>
-                      {theme}
+                      {t}
                     </span>
                   </button>
                 );

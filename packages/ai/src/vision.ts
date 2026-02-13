@@ -1,5 +1,14 @@
 import { getClaudeClient, VISION_MODEL } from "./claude";
 
+export interface ReceiptData {
+  storeName: string | null;
+  purchaseDate: string | null;
+  items: Array<{ name: string; price: number | null; quantity: number | null }>;
+  total: number | null;
+  warrantyInfo: string | null;
+  paymentMethod: string | null;
+}
+
 export interface ScannedItem {
   name: string;
   brand: string | null;
@@ -111,6 +120,91 @@ export async function analyzeItemImage(
       description: "Could not identify the item from the image. Try taking a clearer photo showing the full item or its label.",
       condition: "good",
       estimatedAge: null,
+    };
+  }
+}
+
+const RECEIPT_SYSTEM_PROMPT = `You are a receipt analysis assistant for a home inventory management system.
+Analyze the receipt image and extract all relevant purchase information.
+
+Look for:
+- Store/retailer name
+- Purchase date
+- Individual items with their names, prices, and quantities
+- Total amount
+- Payment method (cash, credit card type, debit, etc.)
+- Any warranty information, return policy, or guarantee details mentioned on the receipt
+
+Respond with a JSON object (no markdown fences, no explanation, just raw JSON) containing:
+- storeName: The store or retailer name (null if not visible)
+- purchaseDate: The date in YYYY-MM-DD format (null if not visible)
+- items: An array of objects, each with:
+  - name: The item name/description as shown on the receipt
+  - price: The price as a number (null if not visible)
+  - quantity: The quantity purchased as a number (null if not visible, default to 1 if price is shown but quantity is not)
+- total: The total amount as a number (null if not visible)
+- warrantyInfo: Any warranty, return policy, or guarantee text found on the receipt (null if none)
+- paymentMethod: The payment method used (null if not visible)
+
+Important:
+- Prices should be numbers without currency symbols (e.g., 29.99 not "$29.99")
+- If an item has a quantity multiplier (e.g., "2 @ $5.99"), set quantity to 2 and price to 5.99
+- Include tax lines and discounts as separate items if present
+- Be thorough — capture every line item on the receipt`;
+
+export async function analyzeReceipt(
+  imageBase64: string,
+  mediaType: "image/jpeg" | "image/png" | "image/webp" | "image/gif" = "image/jpeg"
+): Promise<ReceiptData> {
+  const claude = getClaudeClient();
+
+  const response = await claude.messages.create({
+    model: VISION_MODEL,
+    max_tokens: 2048,
+    system: RECEIPT_SYSTEM_PROMPT,
+    messages: [
+      {
+        role: "user",
+        content: [
+          {
+            type: "image",
+            source: {
+              type: "base64",
+              media_type: mediaType,
+              data: imageBase64,
+            },
+          },
+          {
+            type: "text",
+            text: "Extract all purchase information from this receipt image. Return raw JSON only.",
+          },
+        ],
+      },
+    ],
+  });
+
+  const textBlock = response.content.find((block) => block.type === "text");
+  const rawText = textBlock?.text ?? "{}";
+
+  try {
+    const jsonText = extractJSON(rawText);
+    const parsed = JSON.parse(jsonText) as ReceiptData;
+
+    // Ensure items array exists
+    if (!Array.isArray(parsed.items)) {
+      parsed.items = [];
+    }
+
+    return parsed;
+  } catch (error) {
+    console.error("Failed to parse receipt response:", rawText, error);
+    return {
+      storeName: null,
+      purchaseDate: null,
+      items: [],
+      total: null,
+      warrantyInfo: null,
+      paymentMethod: null,
     };
   }
 }

@@ -19,12 +19,14 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { requireAuth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
+import { RecallDashboardBanner } from "@/components/recalls/recall-dashboard-banner";
+import { PendingInvitationsBanner } from "@/components/homes/pending-invitations-banner";
 
 export default async function DashboardPage() {
   const user = await requireAuth();
 
   // Fetch all data in parallel
-  const [homes, maintenanceTasks, chatSessions, serviceRequests] =
+  const [homes, maintenanceTasks, chatSessions, serviceRequests, recallCount] =
     await Promise.all([
       prisma.home.findMany({
         where: { users: { some: { userId: user.id } } },
@@ -62,6 +64,11 @@ export default async function DashboardPage() {
         },
         take: 5,
       }),
+      prisma.itemRecall.count({
+        where: {
+          item: { home: { users: { some: { userId: user.id } } } },
+        },
+      }),
     ]);
 
   const totalItems = homes.reduce((sum, h) => sum + h._count.items, 0);
@@ -74,6 +81,12 @@ export default async function DashboardPage() {
 
   return (
     <div className="space-y-8">
+      {/* Pending Invitations */}
+      <PendingInvitationsBanner />
+
+      {/* Recall Alert Banner */}
+      <RecallDashboardBanner recallCount={recallCount} />
+
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>

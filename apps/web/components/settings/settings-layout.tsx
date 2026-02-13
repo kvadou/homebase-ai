@@ -1,11 +1,13 @@
 "use client";
 
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { User, Home, Sliders, Shield } from "lucide-react";
+import { User, Home, Sliders, Shield, CalendarDays, Download } from "lucide-react";
 import { ProfileSettings } from "./profile-settings";
 import { HomeSettings } from "./home-settings";
 import { PreferencesSettings } from "./preferences-settings";
 import { AccountSettings } from "./account-settings";
+import { CalendarSettings } from "./calendar-settings";
+import { DataExportSettings } from "./data-export-settings";
 
 export function SettingsLayout() {
   return (
@@ -27,6 +29,14 @@ export function SettingsLayout() {
           <Shield className="h-4 w-4" />
           Account
         </TabsTrigger>
+        <TabsTrigger value="calendar" className="gap-2">
+          <CalendarDays className="h-4 w-4" />
+          Calendar
+        </TabsTrigger>
+        <TabsTrigger value="export" className="gap-2">
+          <Download className="h-4 w-4" />
+          Export
+        </TabsTrigger>
       </TabsList>
 
       <TabsContent value="profile">
@@ -40,6 +50,12 @@ export function SettingsLayout() {
       </TabsContent>
       <TabsContent value="account">
         <AccountSettings />
+      </TabsContent>
+      <TabsContent value="calendar">
+        <CalendarSettings />
+      </TabsContent>
+      <TabsContent value="export">
+        <DataExportSettings />
       </TabsContent>
     </Tabs>
   );

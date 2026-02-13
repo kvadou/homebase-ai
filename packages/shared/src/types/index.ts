@@ -202,6 +202,133 @@ export interface ServiceRequestResponse {
   provider?: ProviderResponse | null;
 }
 
+// Notification types
+export interface NotificationResponse {
+  id: string;
+  userId: string;
+  type: string;
+  title: string;
+  body: string;
+  link: string | null;
+  read: boolean;
+  createdAt: string;
+}
+
+// Home invitation types
+export interface HomeInvitationResponse {
+  id: string;
+  homeId: string;
+  email: string;
+  role: string;
+  status: string;
+  invitedBy: string;
+  expiresAt: string;
+  createdAt: string;
+  home?: { id: string; name: string };
+}
+
+// Home member types
+export interface HomeMemberResponse {
+  id: string;
+  userId: string;
+  role: string;
+  user: {
+    id: string;
+    email: string;
+    firstName: string | null;
+    lastName: string | null;
+    imageUrl: string | null;
+  };
+}
+
+// Analytics types
+export interface HomeAnalyticsResponse {
+  homeHealthScore: number;
+  maintenanceCompliance: number;
+  totalItemValue: number;
+  warrantyFreshness: number;
+  monthlySpending: Array<{ month: string; amount: number }>;
+  categoryBreakdown: Array<{ category: string; count: number; value: number }>;
+  maintenanceTrends: Array<{ month: string; completed: number; overdue: number }>;
+}
+
+// Home passport types
+export interface HomePassportResponse {
+  id: string;
+  homeId: string;
+  generatedAt: string | null;
+  shareToken: string | null;
+  shareExpiresAt: string | null;
+  isPublic: boolean;
+  data: Record<string, unknown>;
+  home: HomeResponse & {
+    rooms: RoomResponse[];
+    items: ItemResponse[];
+  };
+}
+
+// Recall types
+export interface ItemRecallResponse {
+  id: string;
+  itemId: string;
+  title: string;
+  description: string | null;
+  severity: string | null;
+  recallDate: string | null;
+  sourceUrl: string | null;
+  createdAt: string;
+  item?: { id: string; name: string; brand: string | null; model: string | null };
+}
+
+// AI Repair Help types
+export interface RepairHelpResponse {
+  diagnosis: string;
+  steps: string[];
+  difficulty: "easy" | "moderate" | "hard" | "professional";
+  estimatedTime: string;
+  toolsNeeded: string[];
+  safetyWarnings: string[];
+  videos: Array<{
+    title: string;
+    url: string;
+    source: string;
+    description: string;
+  }>;
+  articles: Array<{
+    title: string;
+    url: string;
+    source: string;
+  }>;
+  partsNeeded: Array<{
+    name: string;
+    estimatedPrice: string;
+    searchUrl: string;
+  }>;
+}
+
+// Subscription types
+export interface SubscriptionResponse {
+  id: string;
+  userId: string;
+  plan: string;
+  status: string;
+  stripeCustomerId: string | null;
+  stripeSubscriptionId: string | null;
+  currentPeriodStart: string | null;
+  currentPeriodEnd: string | null;
+  cancelAtPeriodEnd: boolean;
+}
+
+export interface PlanUsageResponse {
+  plan: string;
+  usage: {
+    homes: { used: number; limit: number };
+    items: { used: number; limit: number };
+    aiScans: { used: number; limit: number };
+    members: { used: number; limit: number };
+  };
+}
+
 // Scan result type
 export interface ScanResultResponse {
   name: string;

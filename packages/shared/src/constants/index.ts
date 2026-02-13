@@ -82,3 +82,89 @@ export type ItemCondition = keyof typeof ITEM_CONDITIONS;
 export type MaintenancePriority = keyof typeof MAINTENANCE_PRIORITIES;
 export type MaintenanceStatus = keyof typeof MAINTENANCE_STATUSES;
 export type ServiceRequestStatus = keyof typeof SERVICE_REQUEST_STATUSES;
+
+export const NOTIFICATION_TYPES = {
+  warranty_expiry: "Warranty Expiry",
+  maintenance_due: "Maintenance Due",
+  maintenance_overdue: "Maintenance Overdue",
+  recall_alert: "Recall Alert",
+  system: "System",
+} as const;
+
+export type NotificationType = keyof typeof NOTIFICATION_TYPES;
+
+export const WARRANTY_TYPES = {
+  manufacturer: "Manufacturer",
+  extended: "Extended",
+  home_warranty: "Home Warranty",
+} as const;
+
+export type WarrantyType = keyof typeof WARRANTY_TYPES;
+
+export const HOME_ROLES = {
+  owner: "Owner",
+  editor: "Editor",
+  viewer: "Viewer",
+} as const;
+
+export type HomeRole = keyof typeof HOME_ROLES;
+
+export const INVITATION_STATUSES = {
+  pending: "Pending",
+  accepted: "Accepted",
+  declined: "Declined",
+  expired: "Expired",
+} as const;
+
+export type InvitationStatus = keyof typeof INVITATION_STATUSES;
+
+export const RECALL_SEVERITIES = {
+  low: "Low",
+  moderate: "Moderate",
+  high: "High",
+  critical: "Critical",
+} as const;
+
+export type RecallSeverity = keyof typeof RECALL_SEVERITIES;
+
+export const REPAIR_DIFFICULTIES = {
+  easy: "Easy - DIY Beginner",
+  moderate: "Moderate - DIY Intermediate",
+  hard: "Hard - DIY Advanced",
+  professional: "Professional Required",
+} as const;
+
+export type RepairDifficulty = keyof typeof REPAIR_DIFFICULTIES;
+
+export const PLAN_LIMITS = {
+  free:   { homes: 1, items: 25, aiScans: 10, members: 1 },
+  pro:    { homes: 5, items: 500, aiScans: 100, members: 3 },
+  family: { homes: 10, items: -1, aiScans: -1, members: 10 },
+} as const;
+
+export type PlanName = keyof typeof PLAN_LIMITS;
+
+export const PLAN_NAMES = {
+  free: "Free",
+  pro: "Pro",
+  family: "Family",
+} as const;
+
+export const SUBSCRIPTION_STATUSES = {
+  active: "Active",
+  past_due: "Past Due",
+  canceled: "Canceled",
+  trialing: "Trialing",
+} as const;
+
+export type SubscriptionStatus = keyof typeof SUBSCRIPTION_STATUSES;
+
+export const PAYMENT_STATUSES = {
+  pending: "Pending",
+  processing: "Processing",
+  completed: "Completed",
+  failed: "Failed",
+  refunded: "Refunded",
+} as const;
+
+export type PaymentStatus = keyof typeof PAYMENT_STATUSES;

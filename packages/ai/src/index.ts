@@ -1,8 +1,8 @@
 export { getClaudeClient, sendMessage, DEFAULT_MODEL, VISION_MODEL } from "./claude";
 export type { ChatMessage, MessageRole } from "./claude";
 
-export { analyzeItemImage } from "./vision";
-export type { ScannedItem } from "./vision";
+export { analyzeItemImage, analyzeReceipt } from "./vision";
+export type { ScannedItem, ReceiptData } from "./vision";
 
 export { generateEmbedding, chunkText, EMBEDDING_DIMENSION } from "./embeddings";
 
@@ -12,3 +12,9 @@ export {
   searchManualChunks,
 } from "./rag";
 export type { RetrievedChunk } from "./rag";
+
+export { getRepairHelp } from "./repair-help";
+export type { RepairHelpResult } from "./repair-help";
+
+export { predictMaintenanceNeeds } from "./predictive";
+export type { MaintenancePrediction, PredictiveResult } from "./predictive";

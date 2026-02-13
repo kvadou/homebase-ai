@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Edit, Trash2, Package, Calendar, DollarSign, Shield, Tag, Home, ArrowLeft } from "lucide-react";
+import { Edit, Trash2, Package, Calendar, DollarSign, Shield, Tag, Home, ArrowLeft, Wrench, Wifi } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -11,6 +11,10 @@ import { prisma } from "@/lib/db";
 import { ITEM_CATEGORIES, ITEM_CONDITIONS } from "@homebase-ai/shared";
 import { DeleteItemButton } from "@/components/items/delete-item-button";
 import { ItemManualsSection } from "@/components/manuals/item-manuals-section";
+import { ItemQRCode } from "@/components/items/item-qr-code";
+import { ItemRecallBanner } from "@/components/recalls/item-recall-banner";
+import { AIPredictions } from "@/components/maintenance/ai-predictions";
+import { DeviceDiscovery } from "@/components/smart-home/device-discovery";
 
 interface Props {
   params: Promise<{ itemId: string }>;
@@ -42,6 +46,10 @@ export default async function ItemDetailPage({ params }: Props) {
           },
         },
       },
+      recalls: {
+        orderBy: { createdAt: "desc" },
+      },
+      _count: { select: { recalls: true } },
     },
   });
 
@@ -91,6 +99,9 @@ export default async function ItemDetailPage({ params }: Props) {
         <span className="text-[hsl(var(--foreground))]">{item.name}</span>
       </div>
 
+      {/* Recall Warning Banner */}
+      <ItemRecallBanner recallCount={item._count.recalls} />
+
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div className="flex items-start gap-4">
@@ -124,6 +135,12 @@ export default async function ItemDetailPage({ params }: Props) {
         </div>
         <div className="flex gap-2">
           <Button variant="outline" size="sm" asChild>
+            <Link href={`/items/${item.id}/repair`}>
+              <Wrench className="h-4 w-4" />
+              Repair Help
+            </Link>
+          </Button>
+          <Button variant="outline" size="sm" asChild>
             <Link href={`/items/${item.id}/edit`}>
               <Edit className="h-4 w-4" />
               Edit
@@ -133,13 +150,21 @@ export default async function ItemDetailPage({ params }: Props) {
         </div>
       </div>
 
+      {/* QR Code */}
+      <div className="grid gap-6 lg:grid-cols-[1fr_auto]">
+        <div>
       {/* Tabs */}
       <Tabs defaultValue="info">
         <TabsList>
           <TabsTrigger value="info">Info</TabsTrigger>
           <TabsTrigger value="maintenance">Maintenance</TabsTrigger>
+          <TabsTrigger value="predictions">AI Predictions</TabsTrigger>
           <TabsTrigger value="manuals">Manuals</TabsTrigger>
           <TabsTrigger value="documents">Documents</TabsTrigger>
+          <TabsTrigger value="smart-home">
+            <Wifi className="mr-1 h-4 w-4" />
+            Smart Home
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="info">
@@ -214,6 +239,14 @@ export default async function ItemDetailPage({ params }: Props) {
           </Card>
         </TabsContent>
 
+        <TabsContent value="predictions">
+          <Card>
+            <CardContent className="p-6">
+              <AIPredictions itemId={item.id} />
+            </CardContent>
+          </Card>
+        </TabsContent>
+
         <TabsContent value="manuals">
           <Card>
             <CardContent className="p-6">
@@ -260,7 +293,27 @@ export default async function ItemDetailPage({ params }: Props) {
             </CardContent>
           </Card>
         </TabsContent>
+
+        <TabsContent value="smart-home">
+          <Card>
+            <CardContent className="p-6">
+              <DeviceDiscovery
+                itemId={item.id}
+                currentDevice={{
+                  smartDeviceId: item.smartDeviceId,
+                  smartDeviceType: item.smartDeviceType,
+                  smartDeviceMetadata: item.smartDeviceMetadata as Record<string, unknown> | null,
+                }}
+              />
+            </CardContent>
+          </Card>
+        </TabsContent>
       </Tabs>
+        </div>
+        <div className="lg:w-64">
+          <ItemQRCode itemId={item.id} itemName={item.name} />
+        </div>
+      </div>
     </div>
   );
 }

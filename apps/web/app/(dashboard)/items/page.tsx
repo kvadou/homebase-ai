@@ -7,6 +7,7 @@ import { requireAuth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { ITEM_CATEGORIES, ITEM_CONDITIONS } from "@homebase-ai/shared";
 import { CategoryFilter } from "@/components/items/category-filter";
+import { ItemsHeader } from "@/components/items/items-header";
 
 interface Props {
   searchParams: Promise<{ category?: string; homeId?: string; roomId?: string }>;
@@ -32,20 +33,10 @@ export default async function ItemsPage({ searchParams }: Props) {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="font-heading text-3xl font-bold">Items</h1>
-          <p className="mt-1 text-[hsl(var(--muted-foreground))]">
-            {items.length} item{items.length !== 1 ? "s" : ""} across all your homes
-          </p>
-        </div>
-        <Button asChild>
-          <Link href="/items/new">
-            <Plus className="h-4 w-4" />
-            Add Item
-          </Link>
-        </Button>
-      </div>
+      <ItemsHeader
+        itemCount={items.length}
+        items={items.map((i) => ({ id: i.id, name: i.name, brand: i.brand }))}
+      />
 
       <CategoryFilter activeCategory={params.category} />
 

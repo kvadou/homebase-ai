@@ -8,9 +8,23 @@ const isProtectedRoute = createRouteMatcher([
   "/api/rooms(.*)",
   "/api/items(.*)",
   "/api/upload(.*)",
+  "/api/notifications(.*)",
+  "/api/calendar/token(.*)",
+  "/api/export(.*)",
+  "/api/billing(.*)",
+]);
+
+// These routes use their own auth (token-based, cron secret, or Stripe signature)
+const isPublicApiRoute = createRouteMatcher([
+  "/api/calendar/feed(.*)",
+  "/api/cron(.*)",
+  "/api/billing/webhook(.*)",
 ]);
 
 export default clerkMiddleware(async (auth, req) => {
+  if (isPublicApiRoute(req)) {
+    return;
+  }
   if (isProtectedRoute(req)) {
     await auth.protect();
   }

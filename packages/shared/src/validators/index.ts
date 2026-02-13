@@ -139,6 +139,52 @@ export const createProviderReviewSchema = z.object({
   authorName: z.string().max(200).optional(),
 });
 
+// Notification schemas
+export const markNotificationReadSchema = z.object({
+  notificationIds: z.array(z.string().min(1)).min(1),
+});
+
+// Warranty schemas
+export const updateItemWarrantySchema = z.object({
+  warrantyExpiry: z.string().optional().nullable(),
+  warrantyProvider: z.string().max(200).optional().nullable(),
+  warrantyType: z.enum(["manufacturer", "extended", "home_warranty"]).optional().nullable(),
+  warrantyNotes: z.string().max(2000).optional().nullable(),
+});
+
+// Home invitation schemas
+export const inviteUserSchema = z.object({
+  email: z.string().email("Valid email required"),
+  role: z.enum(["owner", "editor", "viewer"]).default("editor"),
+});
+
+export const respondInvitationSchema = z.object({
+  action: z.enum(["accept", "decline"]),
+});
+
+// Push subscription schemas
+export const pushSubscribeSchema = z.object({
+  endpoint: z.string().url(),
+  keys: z.object({
+    p256dh: z.string().min(1),
+    auth: z.string().min(1),
+  }),
+  platform: z.string().optional().default("web"),
+});
+
+// Receipt scan schema
+export const receiptScanResultSchema = z.object({
+  storeName: z.string().optional(),
+  purchaseDate: z.string().optional(),
+  items: z.array(z.object({
+    name: z.string(),
+    price: z.number().optional(),
+    quantity: z.number().optional(),
+  })).optional(),
+  total: z.number().optional(),
+  warrantyInfo: z.string().optional(),
+});
+
 // Type exports from schemas
 export type CreateHomeInput = z.infer<typeof createHomeSchema>;
 export type UpdateHomeInput = z.infer<typeof updateHomeSchema>;
@@ -158,3 +204,9 @@ export type UpdateProviderInput = z.infer<typeof updateProviderSchema>;
 export type CreateServiceRequestInput = z.infer<typeof createServiceRequestSchema>;
 export type UpdateServiceRequestInput = z.infer<typeof updateServiceRequestSchema>;
 export type CreateProviderReviewInput = z.infer<typeof createProviderReviewSchema>;
+export type MarkNotificationReadInput = z.infer<typeof markNotificationReadSchema>;
+export type UpdateItemWarrantyInput = z.infer<typeof updateItemWarrantySchema>;
+export type InviteUserInput = z.infer<typeof inviteUserSchema>;
+export type RespondInvitationInput = z.infer<typeof respondInvitationSchema>;
+export type PushSubscribeInput = z.infer<typeof pushSubscribeSchema>;
+export type ReceiptScanResult = z.infer<typeof receiptScanResultSchema>;

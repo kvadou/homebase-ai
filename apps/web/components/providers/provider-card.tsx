@@ -1,4 +1,7 @@
-import { Building2, CheckCircle, Mail, Phone } from "lucide-react";
+"use client";
+
+import * as React from "react";
+import { Building2, CheckCircle, CreditCard, Crown, Mail, Phone } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { RatingStars } from "./rating-stars";
@@ -15,17 +18,34 @@ interface ProviderCardProps {
     rating: number | null;
     reviewCount: number;
     isVerified: boolean;
+    featured?: boolean;
+    isClaimable?: boolean;
+    claimedByUserId?: string | null;
+    stripeConnectId?: string | null;
   };
   onClick: (id: string) => void;
   isSelected?: boolean;
+  currentUserId?: string | null;
+  onClaimed?: () => void;
 }
 
-export function ProviderCard({ provider, onClick, isSelected }: ProviderCardProps) {
+export function ProviderCard({
+  provider,
+  onClick,
+  isSelected,
+  currentUserId,
+  onClaimed,
+}: ProviderCardProps) {
+  const isFeatured = provider.featured ?? false;
+  const isClaimedByCurrentUser =
+    currentUserId != null && provider.claimedByUserId === currentUserId;
+
   return (
     <Card
       className={cn(
         "cursor-pointer transition-all hover:shadow-md",
-        isSelected && "ring-2 ring-teal-500"
+        isSelected && "ring-2 ring-teal-500",
+        isFeatured && "ring-1 ring-amber-400/50"
       )}
       onClick={() => onClick(provider.id)}
     >
@@ -47,9 +67,17 @@ export function ProviderCard({ provider, onClick, isSelected }: ProviderCardProp
               </div>
             )}
           </div>
-          <Badge variant="secondary" className="shrink-0">
-            {provider.specialty}
-          </Badge>
+          <div className="flex shrink-0 items-center gap-1.5">
+            {isFeatured && (
+              <Badge className="gap-1 border-transparent bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400">
+                <Crown className="h-3 w-3" />
+                Featured
+              </Badge>
+            )}
+            <Badge variant="secondary">
+              {provider.specialty}
+            </Badge>
+          </div>
         </div>
 
         <div className="mt-3 flex items-center gap-2">
@@ -73,7 +101,113 @@ export function ProviderCard({ provider, onClick, isSelected }: ProviderCardProp
             </div>
           )}
         </div>
+
+        {/* Marketplace actions */}
+        {(provider.isClaimable || isClaimedByCurrentUser) && (
+          <div
+            className="mt-3 flex flex-wrap gap-2 border-t border-[hsl(var(--border))] pt-3"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {provider.isClaimable && !provider.claimedByUserId && (
+              <ClaimProviderButtonInline
+                providerId={provider.id}
+                onClaimed={onClaimed}
+              />
+            )}
+            {isClaimedByCurrentUser && !provider.stripeConnectId && (
+              <ConnectStripeButtonInline providerId={provider.id} />
+            )}
+            {isClaimedByCurrentUser && provider.stripeConnectId && (
+              <Badge variant="success" className="gap-1">
+                <CheckCircle className="h-3 w-3" />
+                Stripe Connected
+              </Badge>
+            )}
+          </div>
+        )}
       </CardContent>
     </Card>
+  );
+}
+
+// Inline versions to avoid circular imports and keep the card self-contained
+
+function ClaimProviderButtonInline({
+  providerId,
+  onClaimed,
+}: {
+  providerId: string;
+  onClaimed?: () => void;
+}) {
+  const [loading, setLoading] = React.useState(false);
+
+  const handleClaim = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch(`/api/providers/${providerId}/claim`, {
+        method: "POST",
+      });
+      const data = await res.json();
+      if (data.success) {
+        onClaimed?.();
+      }
+    } catch {
+      // silently fail
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <button
+      type="button"
+      onClick={handleClaim}
+      disabled={loading}
+      className="inline-flex items-center gap-1 rounded-md border border-[hsl(var(--input))] bg-[hsl(var(--background))] px-2.5 py-1 text-xs font-medium text-[hsl(var(--foreground))] transition-colors hover:bg-[hsl(var(--accent))] disabled:opacity-50"
+    >
+      {loading ? (
+        <span className="h-3 w-3 animate-spin rounded-full border-2 border-current border-t-transparent" />
+      ) : (
+        <Crown className="h-3 w-3" />
+      )}
+      Claim
+    </button>
+  );
+}
+
+function ConnectStripeButtonInline({ providerId }: { providerId: string }) {
+  const [loading, setLoading] = React.useState(false);
+
+  const handleConnect = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch(`/api/providers/${providerId}/connect`, {
+        method: "POST",
+      });
+      const data = await res.json();
+      if (data.success && data.data?.url) {
+        window.location.href = data.data.url;
+      }
+    } catch {
+      // silently fail
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <button
+      type="button"
+      onClick={handleConnect}
+      disabled={loading}
+      className="inline-flex items-center gap-1 rounded-md border border-[hsl(var(--input))] bg-[hsl(var(--background))] px-2.5 py-1 text-xs font-medium text-[hsl(var(--foreground))] transition-colors hover:bg-[hsl(var(--accent))] disabled:opacity-50"
+    >
+      {loading ? (
+        <span className="h-3 w-3 animate-spin rounded-full border-2 border-current border-t-transparent" />
+      ) : (
+        <CreditCard className="h-3 w-3" />
+      )}
+      Connect Stripe
+    </button>
   );
 }
