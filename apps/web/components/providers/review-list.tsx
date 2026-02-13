@@ -1,4 +1,5 @@
-import { User } from "lucide-react";
+import { User, CheckCircle } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { RatingStars } from "./rating-stars";
 
 interface Review {
@@ -6,6 +7,7 @@ interface Review {
   rating: number;
   comment: string | null;
   authorName: string | null;
+  isVerified?: boolean;
   createdAt: string;
 }
 
@@ -37,6 +39,12 @@ export function ReviewList({ reviews }: ReviewListProps) {
               <span className="text-sm font-medium">
                 {review.authorName || "Anonymous"}
               </span>
+              {review.isVerified && (
+                <Badge variant="success" className="gap-1 text-[10px]">
+                  <CheckCircle className="h-3 w-3" />
+                  Verified Customer
+                </Badge>
+              )}
             </div>
             <time className="text-xs text-[hsl(var(--muted-foreground))]">
               {new Date(review.createdAt).toLocaleDateString()}

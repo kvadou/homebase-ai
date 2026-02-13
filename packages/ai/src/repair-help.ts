@@ -7,6 +7,9 @@ export interface RepairHelpResult {
   estimatedTime: string;
   toolsNeeded: string[];
   safetyWarnings: string[];
+  estimatedRepairCost: string;
+  estimatedReplacementCost: string;
+  repairVsReplaceRecommendation: string;
   videos: Array<{
     title: string;
     url: string;
@@ -32,6 +35,7 @@ export async function getRepairHelp(params: {
   category: string;
   issue: string;
   manualContext?: string;
+  zipCode?: string | null;
 }): Promise<RepairHelpResult> {
   const claude = getClaudeClient();
 
@@ -44,6 +48,10 @@ export async function getRepairHelp(params: {
     .filter(Boolean)
     .join(", ");
 
+  const locationNote = params.zipCode
+    ? `The homeowner is located in ZIP code ${params.zipCode}. Adjust cost estimates for their local market.`
+    : "";
+
   const systemPrompt = `You are a home repair expert assistant. Given an item and a described issue, provide comprehensive repair guidance.
 
 You MUST respond with valid JSON matching this exact schema (no markdown, no code fences, just raw JSON):
@@ -55,6 +63,9 @@ You MUST respond with valid JSON matching this exact schema (no markdown, no cod
   "estimatedTime": "e.g. 30 minutes, 1-2 hours",
   "toolsNeeded": ["Tool 1", "Tool 2", ...],
   "safetyWarnings": ["Warning 1", ...],
+  "estimatedRepairCost": "$XX-$XX (total cost including parts and labor if professional)",
+  "estimatedReplacementCost": "$XX-$XX (cost to replace the entire item/component)",
+  "repairVsReplaceRecommendation": "A clear recommendation with reasoning on whether to repair or replace, considering cost, item age, and long-term value",
   "videoSearchQueries": ["specific YouTube search query 1", "specific YouTube search query 2", "specific YouTube search query 3"],
   "articleSearchQueries": ["specific Google search query 1", "specific Google search query 2", "specific Google search query 3"],
   "partsNeeded": [
@@ -73,7 +84,11 @@ Guidelines:
 - Generate 3 highly specific video search queries that would find relevant repair tutorials on YouTube
 - Generate 3 highly specific article search queries for finding repair guides on Google
 - For parts, include specific part names and realistic price estimates
-- If manual context is provided, reference it for model-specific instructions`;
+- If manual context is provided, reference it for model-specific instructions
+- For estimatedRepairCost, include both DIY cost (parts only) and professional cost (parts + labor) as a range
+- For estimatedReplacementCost, provide a realistic range for purchasing and installing a replacement
+- For repairVsReplaceRecommendation, consider: repair cost vs replacement cost, expected remaining lifespan after repair, energy efficiency of newer models, and warranty implications
+${locationNote}`;
 
   const userMessage = `Item: ${itemDescription}
 Issue: ${params.issue}${params.manualContext ? `\n\nRelevant manual information:\n${params.manualContext}` : ""}
@@ -129,6 +144,10 @@ Please diagnose this issue and provide complete repair guidance.`;
     estimatedTime: parsed.estimatedTime ?? "Unknown",
     toolsNeeded: parsed.toolsNeeded ?? [],
     safetyWarnings: parsed.safetyWarnings ?? [],
+    estimatedRepairCost: parsed.estimatedRepairCost ?? "Unknown",
+    estimatedReplacementCost: parsed.estimatedReplacementCost ?? "Unknown",
+    repairVsReplaceRecommendation:
+      parsed.repairVsReplaceRecommendation ?? "",
     videos,
     articles,
     partsNeeded,

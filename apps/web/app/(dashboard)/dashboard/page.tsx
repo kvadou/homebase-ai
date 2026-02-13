@@ -13,6 +13,7 @@ import {
   Clock,
   ArrowRight,
   ChevronRight,
+  Sparkles,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -21,6 +22,7 @@ import { requireAuth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { RecallDashboardBanner } from "@/components/recalls/recall-dashboard-banner";
 import { PendingInvitationsBanner } from "@/components/homes/pending-invitations-banner";
+import { SeasonalDashboardCard } from "@/components/maintenance/seasonal-dashboard-card";
 
 export default async function DashboardPage() {
   const user = await requireAuth();
@@ -70,6 +72,19 @@ export default async function DashboardPage() {
         },
       }),
     ]);
+
+  // Find homes with items but no maintenance tasks for CTA
+  const homesNeedingPlan = [];
+  for (const home of homes) {
+    if (home._count.items > 0) {
+      const taskCount = await prisma.maintenanceTask.count({
+        where: { item: { homeId: home.id } },
+      });
+      if (taskCount === 0) {
+        homesNeedingPlan.push(home);
+      }
+    }
+  }
 
   const totalItems = homes.reduce((sum, h) => sum + h._count.items, 0);
   const overdueTasks = maintenanceTasks.filter(
@@ -170,6 +185,31 @@ export default async function DashboardPage() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Maintenance Autopilot CTA */}
+      {homesNeedingPlan.length > 0 && (
+        <Link href="/dashboard/maintenance">
+          <Card className="group cursor-pointer border-teal-200 bg-gradient-to-r from-teal-50 to-cyan-50 transition-all hover:shadow-md dark:border-teal-900/50 dark:from-teal-950/20 dark:to-cyan-950/20">
+            <CardContent className="flex items-center gap-4 p-4">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-teal-500/20">
+                <Sparkles className="h-6 w-6 text-teal-600" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="text-sm font-semibold text-teal-900 dark:text-teal-200">
+                  Set up your maintenance plan
+                </p>
+                <p className="mt-0.5 text-xs text-teal-700 dark:text-teal-400">
+                  {homesNeedingPlan.length === 1
+                    ? `${homesNeedingPlan[0].name} has ${homesNeedingPlan[0]._count.items} items but no maintenance schedule.`
+                    : `${homesNeedingPlan.length} homes have items but no maintenance schedule.`}{" "}
+                  Use AI Autopilot to generate one in seconds.
+                </p>
+              </div>
+              <ArrowRight className="h-5 w-5 shrink-0 text-teal-500 opacity-0 transition-opacity group-hover:opacity-100" />
+            </CardContent>
+          </Card>
+        </Link>
+      )}
 
       {/* Quick Actions */}
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
@@ -366,6 +406,11 @@ export default async function DashboardPage() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Seasonal Maintenance */}
+      {homes.length > 0 && homes[0].zipCode && (
+        <SeasonalDashboardCard zipCode={homes[0].zipCode} />
+      )}
 
       {/* Home cards */}
       <div>

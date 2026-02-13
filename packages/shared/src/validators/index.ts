@@ -27,7 +27,13 @@ export const createRoomSchema = z.object({
   photoUrl: z.string().url().optional(),
 });
 
-export const updateRoomSchema = createRoomSchema.omit({ homeId: true }).partial();
+export const updateRoomSchema = createRoomSchema.omit({ homeId: true }).partial().extend({
+  paintBrand: z.string().max(200).optional().nullable(),
+  paintColor: z.string().max(200).optional().nullable(),
+  paintFinish: z.string().max(100).optional().nullable(),
+  paintSheen: z.string().max(100).optional().nullable(),
+  paintPurchaseDate: z.string().optional().nullable(),
+});
 
 // Item schemas
 export const createItemSchema = z.object({

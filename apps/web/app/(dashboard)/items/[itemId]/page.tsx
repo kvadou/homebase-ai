@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Edit, Trash2, Package, Calendar, DollarSign, Shield, Tag, Home, ArrowLeft, Wrench, Wifi } from "lucide-react";
+import { Edit, Trash2, Package, Calendar, DollarSign, Shield, Tag, Home, ArrowLeft, Wrench, Wifi, Cog } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -15,6 +15,7 @@ import { ItemQRCode } from "@/components/items/item-qr-code";
 import { ItemRecallBanner } from "@/components/recalls/item-recall-banner";
 import { AIPredictions } from "@/components/maintenance/ai-predictions";
 import { DeviceDiscovery } from "@/components/smart-home/device-discovery";
+import { PartsSection } from "@/components/items/parts-section";
 
 interface Props {
   params: Promise<{ itemId: string }>;
@@ -49,6 +50,7 @@ export default async function ItemDetailPage({ params }: Props) {
       recalls: {
         orderBy: { createdAt: "desc" },
       },
+      parts: { orderBy: { name: "asc" } },
       _count: { select: { recalls: true } },
     },
   });
@@ -161,6 +163,10 @@ export default async function ItemDetailPage({ params }: Props) {
           <TabsTrigger value="predictions">AI Predictions</TabsTrigger>
           <TabsTrigger value="manuals">Manuals</TabsTrigger>
           <TabsTrigger value="documents">Documents</TabsTrigger>
+          <TabsTrigger value="parts">
+            <Cog className="mr-1 h-4 w-4" />
+            Parts
+          </TabsTrigger>
           <TabsTrigger value="smart-home">
             <Wifi className="mr-1 h-4 w-4" />
             Smart Home
@@ -290,6 +296,29 @@ export default async function ItemDetailPage({ params }: Props) {
                   ))}
                 </div>
               )}
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="parts">
+          <Card>
+            <CardContent className="p-6">
+              <PartsSection
+                itemId={item.id}
+                parts={item.parts.map((p) => ({
+                  id: p.id,
+                  name: p.name,
+                  partNumber: p.partNumber,
+                  manufacturer: p.manufacturer,
+                  price: p.price,
+                  sourceUrl: p.sourceUrl,
+                  notes: p.notes,
+                  filterSize: p.filterSize,
+                  quantity: p.quantity,
+                  lastReplacedDate: p.lastReplacedDate?.toISOString() ?? null,
+                  replacementInterval: p.replacementInterval,
+                }))}
+              />
             </CardContent>
           </Card>
         </TabsContent>

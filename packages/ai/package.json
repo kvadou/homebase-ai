@@ -9,7 +9,8 @@
     "./claude": "./src/claude.ts",
     "./embeddings": "./src/embeddings.ts",
     "./rag": "./src/rag.ts",
-    "./vision": "./src/vision.ts"
+    "./vision": "./src/vision.ts",
+    "./home-queries": "./src/home-queries.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit"

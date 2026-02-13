@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Plus, Users, ClipboardList, Loader2 } from "lucide-react";
+import { Plus, Users, ClipboardList, Loader2, Compass } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ProviderCard } from "@/components/providers/provider-card";
@@ -10,6 +10,7 @@ import { ProviderSearch } from "@/components/providers/provider-search";
 import { CreateProviderDialog } from "@/components/providers/create-provider-dialog";
 import { ServiceRequestCard } from "@/components/providers/service-request-card";
 import { CreateRequestDialog } from "@/components/providers/create-request-dialog";
+import { DiscoverProviders } from "@/components/providers/discover-providers";
 
 interface Provider {
   id: string;
@@ -192,6 +193,10 @@ export default function ProvidersPage() {
               <Users className="h-4 w-4" />
               Directory
             </TabsTrigger>
+            <TabsTrigger value="discover" className="gap-1.5">
+              <Compass className="h-4 w-4" />
+              Discover
+            </TabsTrigger>
             <TabsTrigger value="requests" className="gap-1.5">
               <ClipboardList className="h-4 w-4" />
               Requests
@@ -261,6 +266,10 @@ export default function ProvidersPage() {
               ))}
             </div>
           )}
+        </TabsContent>
+
+        <TabsContent value="discover" className="space-y-4">
+          <DiscoverProviders homes={homes} />
         </TabsContent>
 
         <TabsContent value="requests" className="space-y-4">

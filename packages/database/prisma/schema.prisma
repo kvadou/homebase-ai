@@ -26,6 +26,7 @@ model User {
   notifications     Notification[]
   pushSubscriptions PushSubscription[]
   subscription      Subscription?
+  realtorAccount    RealtorAccount?
 
   @@map("users")
 }
@@ -46,6 +47,13 @@ model Home {
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
 
+  // Phase 5: Geocoding + valuation
+  latitude            Float?
+  longitude           Float?
+  estimatedValue      Float?    @map("estimated_value")
+  lastValuationDate   DateTime? @map("last_valuation_date")
+  lastValuationSource String?   @map("last_valuation_source")
+
   users           HomeUser[]
   rooms           Room[]
   items           Item[]
@@ -53,6 +61,10 @@ model Home {
   serviceRequests ServiceRequest[]
   homePassport    HomePassport?
   invitations     HomeInvitation[]
+  insuranceClaims InsuranceClaim[]
+  events          HomeEvent[]
+  issues          HomeIssue[]
+  safetyInfo      SafetyInfo[]
 
   @@map("homes")
 }
@@ -81,8 +93,16 @@ model Room {
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
 
-  home  Home   @relation(fields: [homeId], references: [id], onDelete: Cascade)
-  items Item[]
+  // Phase 5: Paint tracking
+  paintBrand        String?   @map("paint_brand")
+  paintColor        String?   @map("paint_color")
+  paintFinish       String?   @map("paint_finish")
+  paintSheen        String?   @map("paint_sheen")
+  paintPurchaseDate DateTime? @map("paint_purchase_date")
+
+  home   Home        @relation(fields: [homeId], references: [id], onDelete: Cascade)
+  items  Item[]
+  issues HomeIssue[]
 
   @@map("rooms")
 }
@@ -262,6 +282,16 @@ model ProviderProfile {
   createdAt       DateTime @default(now()) @map("created_at")
   updatedAt       DateTime @updatedAt @map("updated_at")
 
+  // Phase 5: External API fields
+  googlePlaceId  String?  @unique @map("google_place_id")
+  yelpId         String?  @unique @map("yelp_id")
+  source         String?  @default("manual") @map("source")
+  hoursJson      Json?    @map("hours_json")
+  photoUrls      Json?    @map("photo_urls")
+  priceLevel     String?  @map("price_level")
+  latitude       Float?
+  longitude      Float?
+
   reviews        ProviderReview[]
   availability   ProviderAvailability[]
   serviceRequests ServiceRequest[]
@@ -296,9 +326,11 @@ model ServiceRequest {
 model ProviderReview {
   id         String   @id @default(cuid())
   providerId String   @map("provider_id")
+  userId     String?  @map("user_id")
   rating     Int
   comment    String?
   authorName String?  @map("author_name")
+  isVerified Boolean  @default(false) @map("is_verified")
   createdAt  DateTime @default(now()) @map("created_at")
 
   provider ProviderProfile @relation(fields: [providerId], references: [id], onDelete: Cascade)
@@ -342,6 +374,12 @@ model Part {
   price       Float?
   sourceUrl   String? @map("source_url")
   notes       String?
+
+  // Phase 5: Filter/replacement tracking
+  filterSize          String?   @map("filter_size")
+  quantity            Int?
+  lastReplacedDate    DateTime? @map("last_replaced_date")
+  replacementInterval String?   @map("replacement_interval")
 
   item Item @relation(fields: [itemId], references: [id], onDelete: Cascade)
 
@@ -432,4 +470,93 @@ model Subscription {
 
   @@index([stripeCustomerId])
   @@map("subscriptions")
+}
+
+// ===== Phase 5: New Models =====
+
+model InsuranceClaim {
+  id             String   @id @default(cuid())
+  homeId         String   @map("home_id")
+  title          String
+  incidentDate   DateTime @map("incident_date")
+  incidentType   String   @map("incident_type")
+  description    String?
+  status         String   @default("draft")
+  totalValue     Float?   @map("total_value")
+  itemIds        Json?    @map("item_ids")
+  aiNarrative    String?  @map("ai_narrative")
+  pdfUrl         String?  @map("pdf_url")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  home Home @relation(fields: [homeId], references: [id], onDelete: Cascade)
+
+  @@map("insurance_claims")
+}
+
+model HomeEvent {
+  id          String   @id @default(cuid())
+  homeId      String   @map("home_id")
+  type        String   // maintenance|purchase|improvement|warranty|custom
+  title       String
+  description String?
+  date        DateTime
+  cost        Float?
+  metadata    Json?
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  home Home @relation(fields: [homeId], references: [id], onDelete: Cascade)
+
+  @@map("home_events")
+}
+
+model HomeIssue {
+  id             String   @id @default(cuid())
+  homeId         String   @map("home_id")
+  roomId         String?  @map("room_id")
+  title          String
+  description    String?
+  severity       String   // cosmetic|moderate|urgent|critical
+  aiDiagnosis    String?  @map("ai_diagnosis")
+  estimatedCost  String?  @map("estimated_cost")
+  photoUrl       String?  @map("photo_url")
+  status         String   @default("identified")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  home Home  @relation(fields: [homeId], references: [id], onDelete: Cascade)
+  room Room? @relation(fields: [roomId], references: [id])
+
+  @@map("home_issues")
+}
+
+model SafetyInfo {
+  id          String   @id @default(cuid())
+  homeId      String   @map("home_id")
+  type        String   // shutoff_water|shutoff_gas|shutoff_electrical|emergency_contact|evacuation_note|go_bag_item
+  title       String
+  description String?
+  location    String?
+  photoUrl    String?  @map("photo_url")
+  sortOrder   Int      @default(0) @map("sort_order")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  home Home @relation(fields: [homeId], references: [id], onDelete: Cascade)
+
+  @@map("safety_info")
+}
+
+model RealtorAccount {
+  id            String   @id @default(cuid())
+  userId        String   @unique @map("user_id")
+  company       String?
+  licenseNumber String?  @map("license_number")
+  territory     String?
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("realtor_accounts")
 }

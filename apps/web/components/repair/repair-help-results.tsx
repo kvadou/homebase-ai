@@ -13,6 +13,8 @@ import {
   HardHat,
   ListChecks,
   Stethoscope,
+  DollarSign,
+  ArrowRightLeft,
 } from "lucide-react";
 import type { RepairHelpResult } from "@homebase-ai/ai";
 
@@ -89,6 +91,56 @@ export function RepairHelpResults({ result }: RepairHelpResultsProps) {
                 </li>
               ))}
             </ul>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Cost Comparison: Repair vs Replace */}
+      {(result.estimatedRepairCost || result.estimatedReplacementCost) && (
+        <Card className="border-teal-200 dark:border-teal-900/50">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-lg">
+              <ArrowRightLeft className="h-5 w-5 text-teal-600" />
+              Repair vs. Replace
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div className="rounded-lg border border-[hsl(var(--border))] p-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <Wrench className="h-4 w-4 text-blue-600" />
+                  <span className="text-sm font-medium">Repair Cost</span>
+                </div>
+                <p className="text-2xl font-bold text-blue-600">
+                  {result.estimatedRepairCost}
+                </p>
+                <p className="mt-1 text-xs text-[hsl(var(--muted-foreground))]">
+                  Estimated total with parts and labor
+                </p>
+              </div>
+              <div className="rounded-lg border border-[hsl(var(--border))] p-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <DollarSign className="h-4 w-4 text-amber-600" />
+                  <span className="text-sm font-medium">Replacement Cost</span>
+                </div>
+                <p className="text-2xl font-bold text-amber-600">
+                  {result.estimatedReplacementCost}
+                </p>
+                <p className="mt-1 text-xs text-[hsl(var(--muted-foreground))]">
+                  New unit purchase and installation
+                </p>
+              </div>
+            </div>
+            {result.repairVsReplaceRecommendation && (
+              <div className="mt-4 rounded-lg bg-teal-50 p-3 dark:bg-teal-950/20">
+                <p className="text-sm font-medium text-teal-900 dark:text-teal-200">
+                  Recommendation
+                </p>
+                <p className="mt-1 text-sm leading-relaxed text-teal-800 dark:text-teal-300">
+                  {result.repairVsReplaceRecommendation}
+                </p>
+              </div>
+            )}
           </CardContent>
         </Card>
       )}

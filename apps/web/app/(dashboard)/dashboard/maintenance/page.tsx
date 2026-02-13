@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { isPast } from "date-fns";
-import { Wrench, Plus, Loader2 } from "lucide-react";
+import { Wrench, Plus, Loader2, Sparkles } from "lucide-react";
 import { useToast } from "@/components/ui/toaster";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -22,6 +22,7 @@ import { CreateTaskDialog } from "@/components/maintenance/create-task-dialog";
 import { LogCompletionDialog } from "@/components/maintenance/log-completion-dialog";
 import { TaskDetailPanel } from "@/components/maintenance/task-detail-panel";
 import { MaintenanceFilters } from "@/components/maintenance/maintenance-filters";
+import { AutopilotWizard } from "@/components/maintenance/autopilot-wizard";
 
 interface HomeOption {
   id: string;
@@ -40,6 +41,7 @@ export default function MaintenancePage() {
   const [selectedPriority, setSelectedPriority] = useState("all");
 
   // Dialogs
+  const [autopilotOpen, setAutopilotOpen] = useState(false);
   const [createOpen, setCreateOpen] = useState(false);
   const [completeTask, setCompleteTask] = useState<MaintenanceTaskData | null>(null);
   const [detailTaskId, setDetailTaskId] = useState<string | null>(null);
@@ -128,10 +130,16 @@ export default function MaintenancePage() {
             Track and manage maintenance tasks for your home items.
           </p>
         </div>
-        <Button onClick={() => setCreateOpen(true)} className="gap-2">
-          <Plus className="h-4 w-4" />
-          Add Task
-        </Button>
+        <div className="flex gap-2">
+          <Button variant="outline" onClick={() => setAutopilotOpen(true)} className="gap-2">
+            <Sparkles className="h-4 w-4" />
+            AI Autopilot
+          </Button>
+          <Button onClick={() => setCreateOpen(true)} className="gap-2">
+            <Plus className="h-4 w-4" />
+            Add Task
+          </Button>
+        </div>
       </div>
 
       <MaintenanceFilters
@@ -241,6 +249,13 @@ export default function MaintenancePage() {
         onOpenChange={(val) => {
           if (!val) setDetailTaskId(null);
         }}
+      />
+
+      {/* Autopilot Wizard */}
+      <AutopilotWizard
+        open={autopilotOpen}
+        onOpenChange={setAutopilotOpen}
+        onTasksCreated={fetchTasks}
       />
 
       {/* Delete Confirmation Dialog */}

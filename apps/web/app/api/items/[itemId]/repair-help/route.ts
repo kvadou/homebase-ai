@@ -13,7 +13,7 @@ export async function POST(req: NextRequest, ctx: Context) {
     const { itemId } = await ctx.params;
 
     const body = await req.json();
-    const { issue } = body as { issue: string };
+    const { issue, zipCode } = body as { issue: string; zipCode?: string };
 
     if (!issue || typeof issue !== "string" || issue.trim().length === 0) {
       return NextResponse.json(
@@ -29,6 +29,7 @@ export async function POST(req: NextRequest, ctx: Context) {
         home: { users: { some: { userId: user.id } } },
       },
       include: {
+        home: { select: { zipCode: true } },
         manuals: {
           include: {
             manual: {
@@ -78,6 +79,7 @@ export async function POST(req: NextRequest, ctx: Context) {
       category: item.category,
       issue: issue.trim(),
       manualContext,
+      zipCode: zipCode || item.home.zipCode,
     });
 
     return NextResponse.json({ success: true, data: result });

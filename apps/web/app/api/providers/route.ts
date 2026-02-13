@@ -26,12 +26,24 @@ export async function GET(req: NextRequest) {
 
     const providers = await prisma.providerProfile.findMany({
       where,
+      include: {
+        _count: {
+          select: {
+            reviews: { where: { isVerified: true } },
+          },
+        },
+      },
       orderBy: [{ featured: "desc" }, { rating: "desc" }, { reviewCount: "desc" }],
     });
 
+    const data = providers.map(({ _count, ...p }) => ({
+      ...p,
+      verifiedReviewCount: _count.reviews,
+    }));
+
     return NextResponse.json({
       success: true,
-      data: providers,
+      data,
       meta: { currentUserId: user.id },
     });
   } catch {

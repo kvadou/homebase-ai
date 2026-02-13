@@ -26,6 +26,7 @@ interface Review {
   rating: number;
   comment: string | null;
   authorName: string | null;
+  isVerified?: boolean;
   createdAt: string;
 }
 

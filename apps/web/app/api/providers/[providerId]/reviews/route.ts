@@ -28,7 +28,7 @@ export async function GET(req: NextRequest, ctx: Context) {
 
 export async function POST(req: NextRequest, ctx: Context) {
   try {
-    await requireAuth();
+    const user = await requireAuth();
     const { providerId } = await ctx.params;
     const body = await req.json();
 
@@ -54,12 +54,23 @@ export async function POST(req: NextRequest, ctx: Context) {
       );
     }
 
+    // Check if reviewer has a completed service request with this provider
+    const completedRequest = await prisma.serviceRequest.findFirst({
+      where: {
+        providerId,
+        status: "completed",
+        home: { users: { some: { userId: user.id } } },
+      },
+    });
+
     const review = await prisma.providerReview.create({
       data: {
         providerId,
+        userId: user.id,
         rating: parsed.data.rating,
         comment: parsed.data.comment,
         authorName: parsed.data.authorName,
+        isVerified: !!completedRequest,
       },
     });
 

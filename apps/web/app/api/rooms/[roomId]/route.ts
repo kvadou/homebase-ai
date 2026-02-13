@@ -35,9 +35,16 @@ export async function PUT(req: NextRequest, ctx: Context) {
       );
     }
 
+    const { paintPurchaseDate, ...rest } = parsed.data;
+
     const updated = await prisma.room.update({
       where: { id: roomId },
-      data: parsed.data,
+      data: {
+        ...rest,
+        ...(paintPurchaseDate !== undefined && {
+          paintPurchaseDate: paintPurchaseDate ? new Date(paintPurchaseDate) : null,
+        }),
+      },
     });
 
     return NextResponse.json({ success: true, data: updated });

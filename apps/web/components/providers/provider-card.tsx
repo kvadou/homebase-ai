@@ -17,6 +17,7 @@ interface ProviderCardProps {
     email: string | null;
     rating: number | null;
     reviewCount: number;
+    verifiedReviewCount?: number;
     isVerified: boolean;
     featured?: boolean;
     isClaimable?: boolean;
@@ -83,7 +84,10 @@ export function ProviderCard({
         <div className="mt-3 flex items-center gap-2">
           <RatingStars rating={provider.rating ?? 0} />
           <span className="text-xs text-[hsl(var(--muted-foreground))]">
-            ({provider.reviewCount} {provider.reviewCount === 1 ? "review" : "reviews"})
+            ({provider.reviewCount} {provider.reviewCount === 1 ? "review" : "reviews"}
+            {(provider.verifiedReviewCount ?? 0) > 0 && (
+              <>, {provider.verifiedReviewCount} verified</>
+            )})
           </span>
         </div>
 

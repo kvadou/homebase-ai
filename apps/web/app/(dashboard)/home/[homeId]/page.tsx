@@ -9,6 +9,8 @@ import { prisma } from "@/lib/db";
 import { ROOM_TYPES, HOME_TYPES, ITEM_CONDITIONS } from "@homebase-ai/shared";
 import { DeleteHomeButton } from "@/components/homes/delete-home-button";
 import { AddRoomDialog } from "@/components/rooms/add-room-dialog";
+import { PaintInfo } from "@/components/rooms/paint-info";
+import { HomeValueCard } from "@/components/homes/home-value-card";
 
 interface Props {
   params: Promise<{ homeId: string }>;
@@ -98,6 +100,16 @@ export default async function HomeDetailPage({ params }: Props) {
         </Card>
       </div>
 
+      {/* Home Value */}
+      {home.address && home.city && home.state && home.zipCode && (
+        <HomeValueCard
+          homeId={home.id}
+          initialValue={home.estimatedValue}
+          initialSource={home.lastValuationSource}
+          initialDate={home.lastValuationDate?.toISOString() ?? null}
+        />
+      )}
+
       {/* Rooms */}
       <div>
         <div className="flex items-center justify-between">
@@ -132,6 +144,18 @@ export default async function HomeDetailPage({ params }: Props) {
                       {room.description}
                     </p>
                   )}
+                  <div className="mt-3 border-t border-[hsl(var(--border))] pt-3">
+                    <PaintInfo
+                      roomId={room.id}
+                      paint={{
+                        paintBrand: room.paintBrand,
+                        paintColor: room.paintColor,
+                        paintFinish: room.paintFinish,
+                        paintSheen: room.paintSheen,
+                        paintPurchaseDate: room.paintPurchaseDate?.toISOString() ?? null,
+                      }}
+                    />
+                  </div>
                 </CardContent>
               </Card>
             ))}

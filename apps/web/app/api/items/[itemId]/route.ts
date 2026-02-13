@@ -25,6 +25,7 @@ export async function GET(req: NextRequest, ctx: Context) {
           take: 5,
         },
         documents: { orderBy: { createdAt: "desc" } },
+        parts: { orderBy: { name: "asc" } },
       },
     });
 
