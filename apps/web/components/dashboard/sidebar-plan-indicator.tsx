@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useAuth } from "@clerk/nextjs";
 import Link from "next/link";
 import { Crown } from "lucide-react";
 
@@ -12,20 +13,25 @@ interface PlanData {
 }
 
 export function SidebarPlanIndicator() {
+  const { isLoaded, isSignedIn } = useAuth();
   const [data, setData] = useState<PlanData | null>(null);
 
   useEffect(() => {
+    if (!isLoaded || !isSignedIn) return;
     fetch("/api/billing/subscription")
-      .then((r) => r.json())
+      .then((r) => {
+        if (!r.ok) return null;
+        return r.json();
+      })
       .then((json) => {
-        if (json.success) {
+        if (json?.success) {
           setData(json.data);
         }
       })
       .catch(() => {
         // Fallback to free plan display
       });
-  }, []);
+  }, [isLoaded, isSignedIn]);
 
   const plan = data?.plan ?? "free";
   const planLabel = plan === "family" ? "Family" : plan === "pro" ? "Pro" : "Free";

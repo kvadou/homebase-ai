@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@clerk/nextjs";
 import { Home, ChevronDown, Plus } from "lucide-react";
 import {
   DropdownMenu,
@@ -19,15 +20,20 @@ interface HomeItem {
 }
 
 export function HomeSelector() {
+  const { isLoaded, isSignedIn } = useAuth();
   const router = useRouter();
   const [homes, setHomes] = React.useState<HomeItem[]>([]);
   const [activeHome, setActiveHome] = React.useState<HomeItem | null>(null);
 
   React.useEffect(() => {
+    if (!isLoaded || !isSignedIn) return;
     fetch("/api/homes")
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) return null;
+        return res.json();
+      })
       .then((data) => {
-        if (data.success && data.data) {
+        if (data?.success && data.data) {
           setHomes(data.data);
           if (data.data.length > 0 && !activeHome) {
             setActiveHome(data.data[0]);
@@ -35,7 +41,7 @@ export function HomeSelector() {
         }
       })
       .catch(() => {});
-  }, []);
+  }, [isLoaded, isSignedIn]);
 
   return (
     <DropdownMenu>

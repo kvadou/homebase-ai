@@ -1,17 +1,20 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { useAuth } from "@clerk/nextjs";
 import { Bell } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { NotificationDropdown } from "./notification-dropdown";
 
 export function NotificationBell() {
+  const { isLoaded, isSignedIn } = useAuth();
   const [unreadCount, setUnreadCount] = useState(0);
   const [open, setOpen] = useState(false);
 
   const fetchCount = useCallback(async () => {
     try {
       const res = await fetch("/api/notifications/unread-count");
+      if (!res.ok) return;
       const data = await res.json();
       if (data.success) {
         setUnreadCount(data.data.count);
@@ -22,10 +25,11 @@ export function NotificationBell() {
   }, []);
 
   useEffect(() => {
+    if (!isLoaded || !isSignedIn) return;
     fetchCount();
     const interval = setInterval(fetchCount, 60_000);
     return () => clearInterval(interval);
-  }, [fetchCount]);
+  }, [fetchCount, isLoaded, isSignedIn]);
 
   return (
     <div className="relative">
