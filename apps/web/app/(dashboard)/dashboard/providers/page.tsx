@@ -69,6 +69,7 @@ export default function ProvidersPage() {
   const [homes, setHomes] = React.useState<Home[]>([]);
   const [loading, setLoading] = React.useState(true);
   const [requestsLoading, setRequestsLoading] = React.useState(true);
+  const [searchInput, setSearchInput] = React.useState("");
   const [search, setSearch] = React.useState("");
   const [specialty, setSpecialty] = React.useState("all");
   const [selectedProvider, setSelectedProvider] = React.useState<ProviderWithDetails | null>(null);
@@ -150,13 +151,14 @@ export default function ProvidersPage() {
     await fetchProviders();
   };
 
-  // Debounce search
+  // Debounce search: update input immediately, defer API query
   const searchTimeoutRef = React.useRef<NodeJS.Timeout | null>(null);
   const handleSearch = (value: string) => {
-    setSearch(value);
+    setSearchInput(value);
     if (searchTimeoutRef.current) clearTimeout(searchTimeoutRef.current);
     searchTimeoutRef.current = setTimeout(() => {
       setLoading(true);
+      setSearch(value);
     }, 300);
   };
 
@@ -201,7 +203,7 @@ export default function ProvidersPage() {
           <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <div className="flex-1">
               <ProviderSearch
-                search={search}
+                search={searchInput}
                 specialty={specialty}
                 onSearch={handleSearch}
                 onSpecialtyFilter={(s) => {
