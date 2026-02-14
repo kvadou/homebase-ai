@@ -11,6 +11,7 @@ const navLinks = [
   { href: "#features", label: "Features" },
   { href: "#how-it-works", label: "How It Works" },
   { href: "#pricing", label: "Pricing" },
+  { href: "#faq", label: "FAQ" },
 ];
 
 export function Navbar() {
@@ -53,7 +54,7 @@ export function Navbar() {
             className="bg-teal-500 hover:bg-teal-600 text-white shadow-lg shadow-teal-500/25 hidden sm:inline-flex"
             asChild
           >
-            <Link href="/sign-up">Get Started Free</Link>
+            <Link href="/sign-up">Start Free Trial</Link>
           </Button>
 
           {/* Mobile hamburger */}
@@ -99,7 +100,7 @@ export function Navbar() {
               className="w-full justify-center bg-teal-500 hover:bg-teal-600 text-white"
               asChild
             >
-              <Link href="/sign-up" onClick={() => setMobileOpen(false)}>Get Started Free</Link>
+              <Link href="/sign-up" onClick={() => setMobileOpen(false)}>Start Free Trial</Link>
             </Button>
           </div>
         </div>

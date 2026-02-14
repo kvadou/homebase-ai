@@ -29,9 +29,9 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "HomeBase AI — Your Intelligent Home Management Platform",
+  title: "HomeBase AI — AI Home Management for Homeowners & Property Managers",
   description:
-    "Scan, identify, and manage everything in your home with AI-powered assistance. Track appliances, access manuals, schedule maintenance, and connect with service providers.",
+    "Scan any appliance, instantly access manuals, track warranties, and get AI-powered maintenance reminders. Free for 1 home. Start managing your home smarter today.",
   manifest: "/manifest.json",
   icons: {
     icon: [
@@ -47,13 +47,35 @@ export const metadata: Metadata = {
     title: "HomeBase AI",
   },
   openGraph: {
-    title: "HomeBase AI — Your Intelligent Home Management Platform",
+    title: "HomeBase AI — Know Every Item in Your Home",
     description:
-      "Scan, identify, and manage everything in your home with AI-powered assistance.",
+      "AI-powered home management. Scan appliances, access manuals instantly, track warranties, and get proactive maintenance reminders. Free for your first home.",
     url: "https://homebase-ai-omega.vercel.app",
     siteName: "HomeBase AI",
     images: [{ url: "/og-image.png", width: 1200, height: 630 }],
     type: "website",
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "HomeBase AI — AI Home Management",
+    description:
+      "Scan any appliance, instantly access manuals, track warranties, and get AI maintenance reminders. Free for 1 home.",
+    images: ["/og-image.png"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  alternates: {
+    canonical: "https://homebase-ai-omega.vercel.app",
   },
 };
 
