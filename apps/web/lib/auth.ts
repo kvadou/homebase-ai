@@ -45,3 +45,11 @@ export async function requireAuth() {
   }
   return user;
 }
+
+export async function requireAdmin() {
+  const user = await requireAuth();
+  if (!user.isAdmin) {
+    throw new Error("Forbidden");
+  }
+  return user;
+}

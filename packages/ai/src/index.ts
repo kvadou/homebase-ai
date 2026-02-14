@@ -29,3 +29,6 @@ export { getHomeQueryTools, executeHomeQueryTool } from "./home-queries";
 export type { HomeQueryToolDefinition } from "./home-queries";
 
 export { generateClaimNarrative } from "./claims";
+
+export { generateMarketingContent, generateAdCopy, generateCompetitorAnalysis } from "./marketing";
+export type { MarketingContentResult, AdCopyResult, CompetitorAnalysisResult } from "./marketing";

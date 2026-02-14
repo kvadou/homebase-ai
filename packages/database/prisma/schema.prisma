@@ -16,6 +16,7 @@ model User {
   firstName String?  @map("first_name")
   lastName  String?  @map("last_name")
   imageUrl  String?  @map("image_url")
+  isAdmin   Boolean  @default(false) @map("is_admin")
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
@@ -27,6 +28,7 @@ model User {
   pushSubscriptions PushSubscription[]
   subscription      Subscription?
   realtorAccount    RealtorAccount?
+  supportTickets    SupportTicket[]
 
   @@map("users")
 }
@@ -559,4 +561,77 @@ model RealtorAccount {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("realtor_accounts")
+}
+
+// ===== Phase 6: Admin Portal Models =====
+
+model SupportTicket {
+  id          String    @id @default(cuid())
+  userId      String    @map("user_id")
+  homeId      String?   @map("home_id")
+  subject     String
+  description String
+  status      String    @default("open") // open|in_progress|resolved|closed
+  priority    String    @default("medium") // low|medium|high|urgent
+  category    String?
+  assignedTo  String?   @map("assigned_to")
+  resolvedAt  DateTime? @map("resolved_at")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  user     User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  messages SupportMessage[]
+
+  @@index([userId])
+  @@index([status])
+  @@map("support_tickets")
+}
+
+model SupportMessage {
+  id         String   @id @default(cuid())
+  ticketId   String   @map("ticket_id")
+  senderType String   @map("sender_type") // customer|admin
+  senderName String   @map("sender_name")
+  content    String
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  ticket SupportTicket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+
+  @@map("support_messages")
+}
+
+model MarketingCampaign {
+  id          String    @id @default(cuid())
+  name        String
+  channel     String    // email|social|search|content
+  status      String    @default("draft") // draft|active|paused|completed
+  description String?
+  budget      Float?
+  spent       Float?
+  startDate   DateTime? @map("start_date")
+  endDate     DateTime? @map("end_date")
+  metrics     Json?
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  content MarketingContent[]
+
+  @@map("marketing_campaigns")
+}
+
+model MarketingContent {
+  id          String    @id @default(cuid())
+  campaignId  String?   @map("campaign_id")
+  type        String    // blog|social|email|ad_copy
+  title       String
+  content     String
+  platform    String?
+  status      String    @default("draft") // draft|published|scheduled
+  aiGenerated Boolean   @default(false) @map("ai_generated")
+  publishedAt DateTime? @map("published_at")
+  createdAt   DateTime  @default(now()) @map("created_at")
+
+  campaign MarketingCampaign? @relation(fields: [campaignId], references: [id], onDelete: SetNull)
+
+  @@map("marketing_content")
 }

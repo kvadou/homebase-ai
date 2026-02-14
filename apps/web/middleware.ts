@@ -4,6 +4,7 @@ const isProtectedRoute = createRouteMatcher([
   "/dashboard(.*)",
   "/home(.*)",
   "/items(.*)",
+  "/admin(.*)",
   "/api/homes(.*)",
   "/api/rooms(.*)",
   "/api/items(.*)",
@@ -12,6 +13,8 @@ const isProtectedRoute = createRouteMatcher([
   "/api/calendar/token(.*)",
   "/api/export(.*)",
   "/api/billing(.*)",
+  "/api/admin(.*)",
+  "/api/support(.*)",
 ]);
 
 // These routes use their own auth (token-based, cron secret, or Stripe signature)

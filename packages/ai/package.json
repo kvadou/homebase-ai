@@ -10,7 +10,8 @@
     "./embeddings": "./src/embeddings.ts",
     "./rag": "./src/rag.ts",
     "./vision": "./src/vision.ts",
-    "./home-queries": "./src/home-queries.ts"
+    "./home-queries": "./src/home-queries.ts",
+    "./marketing": "./src/marketing.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit"
