@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 import { format, formatDistanceToNow, isPast } from "date-fns";
 import {
   Plus,
@@ -23,6 +25,7 @@ import { prisma } from "@/lib/db";
 import { RecallDashboardBanner } from "@/components/recalls/recall-dashboard-banner";
 import { PendingInvitationsBanner } from "@/components/homes/pending-invitations-banner";
 import { SeasonalDashboardCard } from "@/components/maintenance/seasonal-dashboard-card";
+import { ContinueSetupCard } from "@/components/dashboard/continue-setup-card";
 
 export default async function DashboardPage() {
   const user = await requireAuth();
@@ -73,6 +76,15 @@ export default async function DashboardPage() {
       }),
     ]);
 
+  // Redirect new users (no homes) to onboarding unless they skipped
+  if (homes.length === 0) {
+    const cookieStore = await cookies();
+    const skipped = cookieStore.get("onboarding_skipped");
+    if (!skipped) {
+      redirect("/onboarding");
+    }
+  }
+
   // Find homes with items but no maintenance tasks for CTA
   const homesNeedingPlan = [];
   for (const home of homes) {
@@ -96,6 +108,9 @@ export default async function DashboardPage() {
 
   return (
     <div className="space-y-8">
+      {/* Continue Onboarding (shown if user skipped) */}
+      <ContinueSetupCard />
+
       {/* Pending Invitations */}
       <PendingInvitationsBanner />
 
