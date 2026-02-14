@@ -8,7 +8,7 @@ interface ActivityItem {
   id: string;
   type: "signup" | "ticket_opened" | "ticket_resolved" | "subscription";
   description: string;
-  timestamp: Date;
+  timestamp: string | Date;
 }
 
 interface RecentActivityFeedProps {

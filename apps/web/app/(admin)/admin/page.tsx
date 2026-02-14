@@ -115,34 +115,34 @@ export default async function AdminDashboardPage() {
 
   const totalPlanUsers = Object.values(planCounts).reduce((a, b) => a + b, 0);
 
-  // Build activity feed
+  // Build activity feed (serialize dates to strings for client component)
   const activities = [
     ...recentSignups.map((u) => ({
       id: `signup-${u.id}`,
       type: "signup" as const,
       description: `${u.firstName ?? ""} ${u.lastName ?? ""}`.trim() || u.email,
-      timestamp: u.createdAt,
+      timestamp: u.createdAt.toISOString(),
     })),
     ...recentTickets.map((t) => ({
       id: `ticket-${t.id}`,
       type: "ticket_opened" as const,
       description: `${t.user.email}: "${t.subject}"`,
-      timestamp: t.createdAt,
+      timestamp: t.createdAt.toISOString(),
     })),
     ...recentResolutions.map((t) => ({
       id: `resolved-${t.id}`,
       type: "ticket_resolved" as const,
       description: `Resolved: "${t.subject}"`,
-      timestamp: t.resolvedAt ?? t.id ? new Date() : new Date(),
+      timestamp: (t.resolvedAt ?? new Date()).toISOString(),
     })),
     ...recentSubscriptions.map((s) => ({
       id: `sub-${s.id}`,
       type: "subscription" as const,
       description: `${s.user.email} upgraded to ${s.plan}`,
-      timestamp: s.createdAt,
+      timestamp: s.createdAt.toISOString(),
     })),
   ]
-    .sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime())
+    .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
     .slice(0, 8);
 
   const planColors: Record<string, string> = {
@@ -167,23 +167,23 @@ export default async function AdminDashboardPage() {
         <StatCard
           label="Total Users"
           value={totalUsers.toLocaleString()}
-          icon={Users}
+          iconNode={<Users className="h-4 w-4 text-orange-500" />}
           trend={{ value: newUsers7d, label: "past 7 days" }}
         />
         <StatCard
           label="New Users (30d)"
           value={newUsers30d.toLocaleString()}
-          icon={UserPlus}
+          iconNode={<UserPlus className="h-4 w-4 text-orange-500" />}
         />
         <StatCard
           label="MRR"
           value={`$${mrr.toLocaleString()}`}
-          icon={DollarSign}
+          iconNode={<DollarSign className="h-4 w-4 text-orange-500" />}
         />
         <StatCard
           label="Open Tickets"
           value={openTickets}
-          icon={LifeBuoy}
+          iconNode={<LifeBuoy className="h-4 w-4 text-orange-500" />}
         />
       </div>
 
