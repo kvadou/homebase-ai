@@ -16,6 +16,7 @@ import {
   ArrowRight,
   ChevronRight,
   Sparkles,
+  Shield,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -107,7 +108,7 @@ export default async function DashboardPage() {
   );
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       {/* Continue Onboarding (shown if user skipped) */}
       <ContinueSetupCard />
 
@@ -118,16 +119,16 @@ export default async function DashboardPage() {
       <RecallDashboardBanner recallCount={recallCount} />
 
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-end justify-between">
         <div>
-          <h1 className="font-heading text-3xl font-bold">
+          <h1 className="font-heading text-2xl font-bold tracking-tight sm:text-3xl">
             Welcome back{user.firstName ? `, ${user.firstName}` : ""}
           </h1>
-          <p className="mt-1 text-[hsl(var(--muted-foreground))]">
+          <p className="mt-1 text-sm text-[hsl(var(--muted-foreground))]">
             Here&apos;s an overview of your homes and activity.
           </p>
         </div>
-        <Button asChild>
+        <Button asChild size="sm" variant="outline" className="hidden sm:flex">
           <Link href="/home/new">
             <Plus className="h-4 w-4" />
             Add Home
@@ -135,174 +136,140 @@ export default async function DashboardPage() {
         </Button>
       </div>
 
-      {/* Stats Grid */}
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-[hsl(var(--muted-foreground))]">
-              Homes
-            </CardTitle>
-            <Home className="h-4 w-4 text-teal-500" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{homes.length}</div>
-            <p className="text-xs text-[hsl(var(--muted-foreground))]">
-              {homes.reduce((s, h) => s + h._count.rooms, 0)} rooms total
+      {/* Stats Grid — tighter, more distinct */}
+      <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+        <div className="flex items-center gap-3 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-4">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#0A2E4D]/5 dark:bg-[#0A2E4D]/20">
+            <Home className="h-5 w-5 text-[#0A2E4D] dark:text-teal-400" />
+          </div>
+          <div>
+            <p className="text-2xl font-bold leading-none">{homes.length}</p>
+            <p className="mt-0.5 text-xs text-[hsl(var(--muted-foreground))]">
+              {homes.length === 1 ? "Home" : "Homes"}
             </p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-[hsl(var(--muted-foreground))]">
-              Items
-            </CardTitle>
-            <Package className="h-4 w-4 text-teal-500" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{totalItems}</div>
-            <p className="text-xs text-[hsl(var(--muted-foreground))]">
-              Across all homes
+          </div>
+        </div>
+        <div className="flex items-center gap-3 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-4">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#00B4A0]/8 dark:bg-[#00B4A0]/15">
+            <Package className="h-5 w-5 text-[#00B4A0]" />
+          </div>
+          <div>
+            <p className="text-2xl font-bold leading-none">{totalItems}</p>
+            <p className="mt-0.5 text-xs text-[hsl(var(--muted-foreground))]">
+              {totalItems === 1 ? "Item" : "Items"}
             </p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-[hsl(var(--muted-foreground))]">
-              Maintenance
-            </CardTitle>
-            <Wrench className="h-4 w-4 text-teal-500" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{maintenanceTasks.length}</div>
-            <p className="text-xs text-[hsl(var(--muted-foreground))]">
+          </div>
+        </div>
+        <div className="flex items-center gap-3 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-4">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-amber-500/8 dark:bg-amber-500/15">
+            <Wrench className="h-5 w-5 text-amber-600 dark:text-amber-400" />
+          </div>
+          <div>
+            <p className="text-2xl font-bold leading-none">{maintenanceTasks.length}</p>
+            <p className="mt-0.5 text-xs text-[hsl(var(--muted-foreground))]">
               {overdueTasks.length > 0 ? (
-                <span className="text-red-500 font-medium">
+                <span className="font-medium text-red-500">
                   {overdueTasks.length} overdue
                 </span>
               ) : (
-                "All on track"
+                "On track"
               )}
             </p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-[hsl(var(--muted-foreground))]">
-              Service Requests
-            </CardTitle>
-            <Users className="h-4 w-4 text-teal-500" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{serviceRequests.length}</div>
-            <p className="text-xs text-[hsl(var(--muted-foreground))]">
-              Active requests
+          </div>
+        </div>
+        <div className="flex items-center gap-3 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-4">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-violet-500/8 dark:bg-violet-500/15">
+            <Shield className="h-5 w-5 text-violet-600 dark:text-violet-400" />
+          </div>
+          <div>
+            <p className="text-2xl font-bold leading-none">{serviceRequests.length}</p>
+            <p className="mt-0.5 text-xs text-[hsl(var(--muted-foreground))]">
+              Requests
             </p>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </div>
 
-      {/* Maintenance Autopilot CTA */}
+      {/* Quick Actions — distinct icons, cleaner layout */}
+      <div>
+        <h2 className="mb-3 text-xs font-semibold uppercase tracking-wider text-[hsl(var(--muted-foreground))]">
+          Quick Actions
+        </h2>
+        <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+          <Link
+            href="/dashboard/scan"
+            className="group flex flex-col items-center gap-2 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-4 text-center transition-all hover:border-[#00B4A0]/30 hover:shadow-sm"
+          >
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#00B4A0]/10 transition-colors group-hover:bg-[#00B4A0]/20">
+              <ScanLine className="h-5 w-5 text-[#00B4A0]" />
+            </div>
+            <span className="text-xs font-medium">Scan Item</span>
+          </Link>
+          <Link
+            href="/dashboard/chat"
+            className="group flex flex-col items-center gap-2 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-4 text-center transition-all hover:border-[#0A2E4D]/20 hover:shadow-sm"
+          >
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#0A2E4D]/5 transition-colors group-hover:bg-[#0A2E4D]/10 dark:bg-[#0A2E4D]/20 dark:group-hover:bg-[#0A2E4D]/30">
+              <MessageSquare className="h-5 w-5 text-[#0A2E4D] dark:text-blue-400" />
+            </div>
+            <span className="text-xs font-medium">Chat with AI</span>
+          </Link>
+          <Link
+            href="/dashboard/maintenance"
+            className="group flex flex-col items-center gap-2 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-4 text-center transition-all hover:border-amber-500/20 hover:shadow-sm"
+          >
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-500/10 transition-colors group-hover:bg-amber-500/20">
+              <Wrench className="h-5 w-5 text-amber-600 dark:text-amber-400" />
+            </div>
+            <span className="text-xs font-medium">Maintenance</span>
+          </Link>
+          <Link
+            href="/dashboard/providers"
+            className="group flex flex-col items-center gap-2 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-4 text-center transition-all hover:border-violet-500/20 hover:shadow-sm"
+          >
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-500/10 transition-colors group-hover:bg-violet-500/20">
+              <Users className="h-5 w-5 text-violet-600 dark:text-violet-400" />
+            </div>
+            <span className="text-xs font-medium">Providers</span>
+          </Link>
+        </div>
+      </div>
+
+      {/* Maintenance Autopilot CTA — redesigned as a subtle inline nudge */}
       {homesNeedingPlan.length > 0 && (
-        <Link href="/dashboard/maintenance">
-          <Card className="group cursor-pointer border-teal-200 bg-gradient-to-r from-teal-50 to-cyan-50 transition-all hover:shadow-md dark:border-teal-900/50 dark:from-teal-950/20 dark:to-cyan-950/20">
-            <CardContent className="flex items-center gap-4 p-4">
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-teal-500/20">
-                <Sparkles className="h-6 w-6 text-teal-600" />
-              </div>
-              <div className="min-w-0 flex-1">
-                <p className="text-sm font-semibold text-teal-900 dark:text-teal-200">
-                  Set up your maintenance plan
-                </p>
-                <p className="mt-0.5 text-xs text-teal-700 dark:text-teal-400">
-                  {homesNeedingPlan.length === 1
-                    ? `${homesNeedingPlan[0].name} has ${homesNeedingPlan[0]._count.items} items but no maintenance schedule.`
-                    : `${homesNeedingPlan.length} homes have items but no maintenance schedule.`}{" "}
-                  Use AI Autopilot to generate one in seconds.
-                </p>
-              </div>
-              <ArrowRight className="h-5 w-5 shrink-0 text-teal-500 opacity-0 transition-opacity group-hover:opacity-100" />
-            </CardContent>
-          </Card>
+        <Link
+          href="/dashboard/maintenance"
+          className="group flex items-center gap-3 rounded-xl border border-dashed border-[#0A2E4D]/15 bg-[#0A2E4D]/[0.02] p-4 transition-all hover:border-[#0A2E4D]/25 hover:bg-[#0A2E4D]/[0.04] dark:border-teal-500/20 dark:bg-teal-500/[0.03] dark:hover:bg-teal-500/[0.06]"
+        >
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-[#00B4A0] to-[#009e8e] shadow-sm">
+            <Sparkles className="h-4 w-4 text-white" />
+          </div>
+          <div className="min-w-0 flex-1">
+            <p className="text-sm font-medium text-[hsl(var(--foreground))]">
+              Generate a maintenance plan
+              <span className="ml-1.5 inline-flex items-center rounded-full bg-[#00B4A0]/10 px-1.5 py-0.5 text-[10px] font-semibold text-[#00B4A0]">
+                AI
+              </span>
+            </p>
+            <p className="mt-0.5 text-xs text-[hsl(var(--muted-foreground))]">
+              {homesNeedingPlan.length === 1
+                ? `${homesNeedingPlan[0].name} has items but no schedule yet.`
+                : `${homesNeedingPlan.length} homes need maintenance plans.`}
+            </p>
+          </div>
+          <ArrowRight className="h-4 w-4 shrink-0 text-[hsl(var(--muted-foreground))] transition-transform group-hover:translate-x-0.5" />
         </Link>
       )}
 
-      {/* Quick Actions */}
-      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-        <Link href="/dashboard/scan">
-          <Card className="group cursor-pointer transition-all hover:shadow-md hover:border-teal-500/30">
-            <CardContent className="flex items-center gap-3 p-4">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-teal-500/10 transition-colors group-hover:bg-teal-500/20">
-                <ScanLine className="h-5 w-5 text-teal-500" />
-              </div>
-              <div className="min-w-0 flex-1">
-                <p className="text-sm font-medium">Scan Item</p>
-                <p className="text-xs text-[hsl(var(--muted-foreground))]">
-                  AI-powered identification
-                </p>
-              </div>
-              <ArrowRight className="h-4 w-4 text-[hsl(var(--muted-foreground))] opacity-0 transition-opacity group-hover:opacity-100" />
-            </CardContent>
-          </Card>
-        </Link>
-        <Link href="/dashboard/chat">
-          <Card className="group cursor-pointer transition-all hover:shadow-md hover:border-teal-500/30">
-            <CardContent className="flex items-center gap-3 p-4">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-teal-500/10 transition-colors group-hover:bg-teal-500/20">
-                <MessageSquare className="h-5 w-5 text-teal-500" />
-              </div>
-              <div className="min-w-0 flex-1">
-                <p className="text-sm font-medium">Chat with AI</p>
-                <p className="text-xs text-[hsl(var(--muted-foreground))]">
-                  Ask about your home
-                </p>
-              </div>
-              <ArrowRight className="h-4 w-4 text-[hsl(var(--muted-foreground))] opacity-0 transition-opacity group-hover:opacity-100" />
-            </CardContent>
-          </Card>
-        </Link>
-        <Link href="/dashboard/maintenance">
-          <Card className="group cursor-pointer transition-all hover:shadow-md hover:border-teal-500/30">
-            <CardContent className="flex items-center gap-3 p-4">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-teal-500/10 transition-colors group-hover:bg-teal-500/20">
-                <Wrench className="h-5 w-5 text-teal-500" />
-              </div>
-              <div className="min-w-0 flex-1">
-                <p className="text-sm font-medium">Maintenance</p>
-                <p className="text-xs text-[hsl(var(--muted-foreground))]">
-                  Track & schedule tasks
-                </p>
-              </div>
-              <ArrowRight className="h-4 w-4 text-[hsl(var(--muted-foreground))] opacity-0 transition-opacity group-hover:opacity-100" />
-            </CardContent>
-          </Card>
-        </Link>
-        <Link href="/dashboard/providers">
-          <Card className="group cursor-pointer transition-all hover:shadow-md hover:border-teal-500/30">
-            <CardContent className="flex items-center gap-3 p-4">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-teal-500/10 transition-colors group-hover:bg-teal-500/20">
-                <Users className="h-5 w-5 text-teal-500" />
-              </div>
-              <div className="min-w-0 flex-1">
-                <p className="text-sm font-medium">Providers</p>
-                <p className="text-xs text-[hsl(var(--muted-foreground))]">
-                  Find service pros
-                </p>
-              </div>
-              <ArrowRight className="h-4 w-4 text-[hsl(var(--muted-foreground))] opacity-0 transition-opacity group-hover:opacity-100" />
-            </CardContent>
-          </Card>
-        </Link>
-      </div>
-
       {/* Two-column layout for maintenance + chat */}
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className="grid gap-4 lg:grid-cols-2">
         {/* Maintenance Summary */}
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between">
-            <CardTitle className="text-lg font-semibold">
+          <CardHeader className="flex flex-row items-center justify-between pb-3">
+            <CardTitle className="text-sm font-semibold">
               Maintenance
             </CardTitle>
-            <Button variant="ghost" size="sm" asChild className="gap-1 text-xs">
+            <Button variant="ghost" size="sm" asChild className="h-auto gap-1 px-2 py-1 text-xs text-[hsl(var(--muted-foreground))]">
               <Link href="/dashboard/maintenance">
                 View All <ChevronRight className="h-3 w-3" />
               </Link>
@@ -311,14 +278,14 @@ export default async function DashboardPage() {
           <CardContent>
             {maintenanceTasks.length === 0 ? (
               <div className="flex flex-col items-center py-6 text-center">
-                <CheckCircle2 className="mb-2 h-8 w-8 text-teal-500" />
+                <CheckCircle2 className="mb-2 h-8 w-8 text-[#00B4A0]" />
                 <p className="text-sm font-medium">All caught up!</p>
                 <p className="mt-1 text-xs text-[hsl(var(--muted-foreground))]">
                   No pending maintenance tasks.
                 </p>
               </div>
             ) : (
-              <div className="space-y-3">
+              <div className="space-y-2">
                 {/* Overdue tasks first */}
                 {overdueTasks.map((task) => (
                   <div
@@ -366,11 +333,11 @@ export default async function DashboardPage() {
 
         {/* Recent Chat Sessions */}
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between">
-            <CardTitle className="text-lg font-semibold">
+          <CardHeader className="flex flex-row items-center justify-between pb-3">
+            <CardTitle className="text-sm font-semibold">
               Recent Chats
             </CardTitle>
-            <Button variant="ghost" size="sm" asChild className="gap-1 text-xs">
+            <Button variant="ghost" size="sm" asChild className="h-auto gap-1 px-2 py-1 text-xs text-[hsl(var(--muted-foreground))]">
               <Link href="/dashboard/chat">
                 Open Chat <ChevronRight className="h-3 w-3" />
               </Link>
@@ -392,14 +359,14 @@ export default async function DashboardPage() {
                 </Button>
               </div>
             ) : (
-              <div className="space-y-3">
+              <div className="space-y-2">
                 {chatSessions.map((session) => (
                   <Link
                     key={session.id}
                     href="/dashboard/chat"
                     className="flex items-start gap-3 rounded-lg border border-[hsl(var(--border))] p-3 transition-colors hover:bg-[hsl(var(--muted))]/50"
                   >
-                    <MessageSquare className="mt-0.5 h-4 w-4 shrink-0 text-teal-500" />
+                    <MessageSquare className="mt-0.5 h-4 w-4 shrink-0 text-[#00B4A0]" />
                     <div className="min-w-0 flex-1">
                       <p className="text-sm font-medium truncate">
                         {session.title || "New Chat"}
@@ -428,48 +395,59 @@ export default async function DashboardPage() {
       )}
 
       {/* Home cards */}
-      <div>
-        <h2 className="font-heading text-xl font-semibold">Your Homes</h2>
-        {homes.length === 0 ? (
-          <Card className="mt-4">
-            <CardContent className="flex flex-col items-center justify-center py-16">
-              <Home className="h-12 w-12 text-[hsl(var(--muted-foreground))]" />
-              <h3 className="mt-4 font-heading text-lg font-semibold">
-                No homes yet
-              </h3>
-              <p className="mt-1 text-sm text-[hsl(var(--muted-foreground))]">
-                Add your first home to get started.
-              </p>
-              <Button className="mt-4" asChild>
-                <Link href="/home/new">
-                  <Plus className="h-4 w-4" />
-                  Add Your First Home
-                </Link>
-              </Button>
-            </CardContent>
-          </Card>
-        ) : (
-          <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {homes.length === 0 ? (
+        <Card>
+          <CardContent className="flex flex-col items-center justify-center py-16">
+            <Home className="h-12 w-12 text-[hsl(var(--muted-foreground))]" />
+            <h3 className="mt-4 font-heading text-lg font-semibold">
+              No homes yet
+            </h3>
+            <p className="mt-1 text-sm text-[hsl(var(--muted-foreground))]">
+              Add your first home to get started.
+            </p>
+            <Button className="mt-4" asChild>
+              <Link href="/home/new">
+                <Plus className="h-4 w-4" />
+                Add Your First Home
+              </Link>
+            </Button>
+          </CardContent>
+        </Card>
+      ) : (
+        <div>
+          <div className="mb-3 flex items-center justify-between">
+            <h2 className="text-xs font-semibold uppercase tracking-wider text-[hsl(var(--muted-foreground))]">
+              Your Homes
+            </h2>
+            <Button variant="ghost" size="sm" asChild className="h-auto gap-1 px-2 py-1 text-xs text-[hsl(var(--muted-foreground))]">
+              <Link href="/home/new">
+                <Plus className="h-3 w-3" />
+                Add Home
+              </Link>
+            </Button>
+          </div>
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {homes.map((home) => (
               <Link key={home.id} href={`/home/${home.id}`}>
                 <Card className="transition-all duration-200 hover:shadow-md hover:border-[hsl(var(--ring))]/30 cursor-pointer">
-                  <CardContent className="p-6">
-                    <div className="flex items-start gap-4">
-                      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-teal-500/10">
-                        <Home className="h-6 w-6 text-teal-500" />
+                  <CardContent className="p-5">
+                    <div className="flex items-start gap-3.5">
+                      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#0A2E4D]/5 dark:bg-[#0A2E4D]/20">
+                        <Home className="h-5 w-5 text-[#0A2E4D] dark:text-teal-400" />
                       </div>
                       <div className="min-w-0 flex-1">
-                        <h3 className="font-heading font-semibold truncate">
+                        <h3 className="font-heading text-sm font-semibold truncate">
                           {home.name}
                         </h3>
                         {home.address && (
-                          <p className="mt-0.5 text-sm text-[hsl(var(--muted-foreground))] truncate">
+                          <p className="mt-0.5 text-xs text-[hsl(var(--muted-foreground))] truncate">
                             {home.city}
                             {home.state ? `, ${home.state}` : ""}
                           </p>
                         )}
-                        <div className="mt-3 flex gap-4 text-xs text-[hsl(var(--muted-foreground))]">
+                        <div className="mt-2.5 flex gap-3 text-[11px] text-[hsl(var(--muted-foreground))]">
                           <span>{home._count.rooms} rooms</span>
+                          <span className="text-[hsl(var(--border))]">&middot;</span>
                           <span>{home._count.items} items</span>
                         </div>
                       </div>
@@ -479,8 +457,8 @@ export default async function DashboardPage() {
               </Link>
             ))}
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 }

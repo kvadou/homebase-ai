@@ -97,7 +97,7 @@ export function Sidebar({ open, onClose }: SidebarProps) {
         </div>
 
         {/* Nav items */}
-        <nav className="flex-1 space-y-1 overflow-y-auto px-3 py-4">
+        <nav className="flex-1 space-y-0.5 overflow-y-auto px-3 py-4">
           {navItems.map((item) => {
             const isActive =
               pathname === item.href ||
@@ -109,16 +109,19 @@ export function Sidebar({ open, onClose }: SidebarProps) {
                 href={item.href}
                 onClick={onClose}
                 className={cn(
-                  "flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-medium transition-colors",
+                  "relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
                   isActive
                     ? "bg-[hsl(var(--sidebar-accent))] text-[hsl(var(--sidebar-primary))]"
-                    : "text-[hsl(var(--sidebar-foreground))]/70 hover:bg-[hsl(var(--sidebar-accent))] hover:text-[hsl(var(--sidebar-foreground))]"
+                    : "text-[hsl(var(--sidebar-foreground))]/70 hover:bg-[hsl(var(--sidebar-accent))]/50 hover:text-[hsl(var(--sidebar-foreground))]"
                 )}
               >
+                {isActive && (
+                  <div className="absolute left-0 top-1/2 h-5 w-[3px] -translate-y-1/2 rounded-r-full bg-[#00B4A0]" />
+                )}
                 <item.icon
                   className={cn(
-                    "h-5 w-5 shrink-0",
-                    isActive ? "text-[hsl(var(--sidebar-primary))]" : ""
+                    "h-[18px] w-[18px] shrink-0",
+                    isActive ? "text-[#00B4A0]" : ""
                   )}
                 />
                 {item.label}
