@@ -9,7 +9,7 @@ import {
   Loader2,
   Package,
 } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { WarrantyItemCard } from "@/components/warranties/warranty-item-card";
 import { EditWarrantyDialog } from "@/components/warranties/edit-warranty-dialog";
@@ -73,7 +73,7 @@ export default function WarrantiesPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">
-        <Loader2 className="h-8 w-8 animate-spin text-[hsl(var(--muted-foreground))]" />
+        <Loader2 className="h-8 w-8 animate-spin text-emerald-500" />
       </div>
     );
   }
@@ -85,8 +85,8 @@ export default function WarrantiesPage() {
       {/* Header */}
       <div>
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-teal-500/10">
-            <Shield className="h-5 w-5 text-teal-500" />
+          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-500/10">
+            <Shield className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
           </div>
           <div>
             <h1 className="font-heading text-2xl font-bold text-[hsl(var(--foreground))]">
@@ -100,51 +100,43 @@ export default function WarrantiesPage() {
       </div>
 
       {/* Stats */}
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-[hsl(var(--muted-foreground))]">
-              Total Warranties
-            </CardTitle>
-            <Shield className="h-4 w-4 text-teal-500" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{stats.total}</div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-[hsl(var(--muted-foreground))]">
-              Active
-            </CardTitle>
-            <ShieldCheck className="h-4 w-4 text-green-500" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-green-600">{stats.active}</div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-[hsl(var(--muted-foreground))]">
-              Expiring Soon
-            </CardTitle>
-            <ShieldAlert className="h-4 w-4 text-amber-500" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-amber-600">{stats.expiring}</div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-[hsl(var(--muted-foreground))]">
-              Expired
-            </CardTitle>
-            <ShieldX className="h-4 w-4 text-red-500" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-red-600">{stats.expired}</div>
-          </CardContent>
-        </Card>
+      <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+        <div className="flex items-center gap-3 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-4">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-emerald-500/8 dark:bg-emerald-500/15">
+            <Shield className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
+          </div>
+          <div>
+            <p className="text-2xl font-bold leading-none">{stats.total}</p>
+            <p className="mt-0.5 text-xs text-[hsl(var(--muted-foreground))]">Total</p>
+          </div>
+        </div>
+        <div className="flex items-center gap-3 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-4">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-green-500/8 dark:bg-green-500/15">
+            <ShieldCheck className="h-5 w-5 text-green-600 dark:text-green-400" />
+          </div>
+          <div>
+            <p className="text-2xl font-bold leading-none">{stats.active}</p>
+            <p className="mt-0.5 text-xs text-[hsl(var(--muted-foreground))]">Active</p>
+          </div>
+        </div>
+        <div className="flex items-center gap-3 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-4">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-amber-500/8 dark:bg-amber-500/15">
+            <ShieldAlert className="h-5 w-5 text-amber-600 dark:text-amber-400" />
+          </div>
+          <div>
+            <p className="text-2xl font-bold leading-none">{stats.expiring}</p>
+            <p className="mt-0.5 text-xs text-[hsl(var(--muted-foreground))]">Expiring</p>
+          </div>
+        </div>
+        <div className="flex items-center gap-3 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-4">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-red-500/8 dark:bg-red-500/15">
+            <ShieldX className="h-5 w-5 text-red-600 dark:text-red-400" />
+          </div>
+          <div>
+            <p className="text-2xl font-bold leading-none">{stats.expired}</p>
+            <p className="mt-0.5 text-xs text-[hsl(var(--muted-foreground))]">Expired</p>
+          </div>
+        </div>
       </div>
 
       {/* Warranty Tabs */}

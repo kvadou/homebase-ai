@@ -197,10 +197,10 @@ export default function BillingPage() {
 
   if (loading) {
     return (
-      <div className="mx-auto max-w-6xl space-y-6 px-4 py-6 sm:px-6">
+      <div className="mx-auto max-w-6xl space-y-6">
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-teal-500/10">
-            <CreditCard className="h-5 w-5 text-teal-500" />
+          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-500/10">
+            <CreditCard className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
           </div>
           <div>
             <h1 className="font-heading text-2xl font-bold text-[hsl(var(--foreground))]">
@@ -212,7 +212,7 @@ export default function BillingPage() {
           </div>
         </div>
         <div className="flex items-center justify-center py-20">
-          <Loader2 className="h-8 w-8 animate-spin text-teal-500" />
+          <Loader2 className="h-8 w-8 animate-spin text-emerald-500" />
         </div>
       </div>
     );
@@ -222,12 +222,12 @@ export default function BillingPage() {
   const isPaidPlan = currentPlan !== "free";
 
   return (
-    <div className="mx-auto max-w-6xl space-y-8 px-4 py-6 sm:px-6">
+    <div className="mx-auto max-w-6xl space-y-6">
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-teal-500/10">
-            <CreditCard className="h-5 w-5 text-teal-500" />
+          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-500/10">
+            <CreditCard className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
           </div>
           <div>
             <h1 className="font-heading text-2xl font-bold text-[hsl(var(--foreground))]">

@@ -84,9 +84,17 @@ export default function RealtorPage() {
   if (loading) {
     return (
       <div className="space-y-6">
-        <h1 className="font-heading text-3xl font-bold">Realtor Portal</h1>
+        <div className="flex items-center gap-3">
+          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#0A2E4D]/5 dark:bg-[#0A2E4D]/20">
+            <Building2 className="h-5 w-5 text-[#0A2E4D] dark:text-teal-400" />
+          </div>
+          <div>
+            <h1 className="font-heading text-2xl font-bold text-[hsl(var(--foreground))]">Realtor Portal</h1>
+            <p className="text-sm text-[hsl(var(--muted-foreground))]">Loading your account...</p>
+          </div>
+        </div>
         <div className="flex items-center justify-center py-16">
-          <div className="h-8 w-8 animate-spin rounded-full border-4 border-teal-500 border-t-transparent" />
+          <div className="h-8 w-8 animate-spin rounded-full border-4 border-[#0A2E4D] dark:border-teal-400 border-t-transparent" />
         </div>
       </div>
     );
@@ -96,17 +104,22 @@ export default function RealtorPage() {
   if (!account) {
     return (
       <div className="space-y-6">
-        <div>
-          <h1 className="font-heading text-3xl font-bold">Realtor Portal</h1>
-          <p className="mt-1 text-[hsl(var(--muted-foreground))]">
-            Gift HomeBase Passports to your home buyers and build lasting relationships.
-          </p>
+        <div className="flex items-center gap-3">
+          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#0A2E4D]/5 dark:bg-[#0A2E4D]/20">
+            <Building2 className="h-5 w-5 text-[#0A2E4D] dark:text-teal-400" />
+          </div>
+          <div>
+            <h1 className="font-heading text-2xl font-bold text-[hsl(var(--foreground))]">Realtor Portal</h1>
+            <p className="text-sm text-[hsl(var(--muted-foreground))]">
+              Gift HomeBase Passports to your home buyers and build lasting relationships.
+            </p>
+          </div>
         </div>
 
         <Card className="max-w-lg">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Building2 className="h-5 w-5 text-teal-500" />
+              <Building2 className="h-5 w-5 text-[#0A2E4D] dark:text-teal-400" />
               Create Your Realtor Account
             </CardTitle>
           </CardHeader>
@@ -152,18 +165,23 @@ export default function RealtorPage() {
   // Show realtor dashboard
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="font-heading text-3xl font-bold">Realtor Portal</h1>
-        <p className="mt-1 text-[hsl(var(--muted-foreground))]">
-          Manage your account and gift HomeBase Passports to buyers.
-        </p>
+      <div className="flex items-center gap-3">
+        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#0A2E4D]/5 dark:bg-[#0A2E4D]/20">
+          <Building2 className="h-5 w-5 text-[#0A2E4D] dark:text-teal-400" />
+        </div>
+        <div>
+          <h1 className="font-heading text-2xl font-bold text-[hsl(var(--foreground))]">Realtor Portal</h1>
+          <p className="text-sm text-[hsl(var(--muted-foreground))]">
+            Manage your account and gift HomeBase Passports to buyers.
+          </p>
+        </div>
       </div>
 
       {/* Account Info */}
       <Card>
         <CardContent className="flex items-start gap-4 p-6">
-          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-teal-500/10">
-            <Building2 className="h-6 w-6 text-teal-500" />
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#0A2E4D]/5 dark:bg-[#0A2E4D]/20">
+            <Building2 className="h-6 w-6 text-[#0A2E4D] dark:text-teal-400" />
           </div>
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-2">

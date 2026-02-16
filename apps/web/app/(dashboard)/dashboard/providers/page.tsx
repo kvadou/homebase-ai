@@ -165,7 +165,7 @@ export default function ProvidersPage() {
 
   if (selectedProvider) {
     return (
-      <div className="mx-auto max-w-3xl px-4 py-6">
+      <div className="mx-auto max-w-3xl">
         <ProviderDetail
           provider={selectedProvider}
           onBack={() => setSelectedProvider(null)}
@@ -177,7 +177,7 @@ export default function ProvidersPage() {
   }
 
   return (
-    <div className="mx-auto max-w-5xl px-4 py-6">
+    <div className="mx-auto max-w-5xl">
       <Tabs defaultValue="directory">
         <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
@@ -232,8 +232,8 @@ export default function ProvidersPage() {
             </div>
           ) : providers.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-12 text-center">
-              <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-teal-500/10">
-                <Users className="h-8 w-8 text-teal-500" />
+              <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-violet-500/10">
+                <Users className="h-8 w-8 text-violet-600 dark:text-violet-400" />
               </div>
               <h3 className="font-semibold text-[hsl(var(--foreground))]">
                 No providers found
@@ -293,8 +293,8 @@ export default function ProvidersPage() {
             </div>
           ) : requests.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-12 text-center">
-              <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-teal-500/10">
-                <ClipboardList className="h-8 w-8 text-teal-500" />
+              <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-violet-500/10">
+                <ClipboardList className="h-8 w-8 text-violet-600 dark:text-violet-400" />
               </div>
               <h3 className="font-semibold text-[hsl(var(--foreground))]">
                 No service requests

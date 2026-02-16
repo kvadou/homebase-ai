@@ -10,7 +10,10 @@ import { HomeInspector } from "@/components/scan/home-inspector";
 export default function ScanPage() {
   return (
     <div>
-      <div className="mb-6 text-center">
+      <div className="mb-6 flex flex-col items-center text-center">
+        <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-[#00B4A0]/10">
+          <ScanLine className="h-6 w-6 text-[#00B4A0]" />
+        </div>
         <h1 className="font-heading text-2xl font-bold text-[hsl(var(--foreground))]">
           AI Scanner
         </h1>

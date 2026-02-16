@@ -144,17 +144,17 @@ export default function PassportPage() {
   if (isLoadingHomes) {
     return (
       <div className="flex items-center justify-center py-20">
-        <Loader2 className="h-8 w-8 animate-spin text-teal-500" />
+        <Loader2 className="h-8 w-8 animate-spin text-[#0A2E4D] dark:text-teal-400" />
       </div>
     );
   }
 
   if (homes.length === 0) {
     return (
-      <div className="space-y-8">
+      <div className="space-y-6">
         <div>
-          <h1 className="font-heading text-3xl font-bold">Home Passport</h1>
-          <p className="mt-1 text-[hsl(var(--muted-foreground))]">
+          <h1 className="font-heading text-2xl font-bold">Home Passport</h1>
+          <p className="mt-1 text-sm text-[hsl(var(--muted-foreground))]">
             A complete digital record of your home.
           </p>
         </div>
@@ -174,12 +174,12 @@ export default function PassportPage() {
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="font-heading text-3xl font-bold">Home Passport</h1>
-          <p className="mt-1 text-[hsl(var(--muted-foreground))]">
+          <h1 className="font-heading text-2xl font-bold">Home Passport</h1>
+          <p className="mt-1 text-sm text-[hsl(var(--muted-foreground))]">
             A complete digital record of your home.
           </p>
         </div>
@@ -219,8 +219,8 @@ export default function PassportPage() {
             className="flex w-full items-center justify-between rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-4 py-3 text-left transition-colors hover:bg-[hsl(var(--muted))]/50 sm:w-80"
           >
             <div className="flex items-center gap-3">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-teal-500/10">
-                <Home className="h-4 w-4 text-teal-500" />
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#0A2E4D]/5 dark:bg-[#0A2E4D]/20">
+                <Home className="h-4 w-4 text-[#0A2E4D] dark:text-teal-400" />
               </div>
               <div>
                 <p className="text-sm font-medium">
@@ -247,12 +247,12 @@ export default function PassportPage() {
                   }}
                   className={`flex w-full items-center gap-3 px-4 py-3 text-left transition-colors first:rounded-t-lg last:rounded-b-lg hover:bg-[hsl(var(--muted))]/50 ${
                     home.id === selectedHomeId
-                      ? "bg-teal-500/5"
+                      ? "bg-[#0A2E4D]/5"
                       : ""
                   }`}
                 >
-                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-teal-500/10">
-                    <Home className="h-4 w-4 text-teal-500" />
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#0A2E4D]/5 dark:bg-[#0A2E4D]/20">
+                    <Home className="h-4 w-4 text-[#0A2E4D] dark:text-teal-400" />
                   </div>
                   <div>
                     <p className="text-sm font-medium">{home.name}</p>
@@ -264,7 +264,7 @@ export default function PassportPage() {
                     )}
                   </div>
                   {home.id === selectedHomeId && (
-                    <CheckCircle2 className="ml-auto h-4 w-4 text-teal-500" />
+                    <CheckCircle2 className="ml-auto h-4 w-4 text-[#0A2E4D] dark:text-teal-400" />
                   )}
                 </button>
               ))}
@@ -277,8 +277,8 @@ export default function PassportPage() {
       {!passport && (
         <Card>
           <CardContent className="flex flex-col items-center justify-center py-16">
-            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-teal-500/10">
-              <FileText className="h-8 w-8 text-teal-500" />
+            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[#0A2E4D]/5 dark:bg-[#0A2E4D]/20">
+              <FileText className="h-8 w-8 text-[#0A2E4D] dark:text-teal-400" />
             </div>
             <h3 className="mt-4 font-heading text-lg font-semibold">
               Generate Your Home Passport

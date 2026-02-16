@@ -52,13 +52,19 @@ export default function ClaimsPage() {
     <div className="space-y-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="flex items-center gap-2 text-2xl font-bold text-[hsl(var(--foreground))]">
-            <FileCheck className="h-6 w-6 text-teal-500" />
-            Insurance Claims
-          </h1>
-          <p className="mt-1 text-sm text-[hsl(var(--muted-foreground))]">
-            Build and manage insurance claims with AI-generated narratives.
-          </p>
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-500/10">
+              <FileCheck className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+            </div>
+            <div>
+              <h1 className="font-heading text-2xl font-bold text-[hsl(var(--foreground))]">
+                Insurance Claims
+              </h1>
+              <p className="text-sm text-[hsl(var(--muted-foreground))]">
+                Build and manage claims with AI-generated narratives.
+              </p>
+            </div>
+          </div>
         </div>
         <Button onClick={() => setBuilderOpen(true)} className="gap-2">
           <Plus className="h-4 w-4" />
@@ -68,7 +74,7 @@ export default function ClaimsPage() {
 
       {loading ? (
         <div className="flex items-center justify-center py-20">
-          <Loader2 className="h-6 w-6 animate-spin text-teal-500" />
+          <Loader2 className="h-6 w-6 animate-spin text-blue-500" />
         </div>
       ) : claims.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-20 text-center">

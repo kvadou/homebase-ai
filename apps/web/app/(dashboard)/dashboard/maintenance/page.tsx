@@ -122,13 +122,19 @@ export default function MaintenancePage() {
     <div className="space-y-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="flex items-center gap-2 text-2xl font-bold text-[hsl(var(--foreground))]">
-            <Wrench className="h-6 w-6 text-teal-500" />
-            Maintenance
-          </h1>
-          <p className="mt-1 text-sm text-[hsl(var(--muted-foreground))]">
-            Track and manage maintenance tasks for your home items.
-          </p>
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-amber-500/10">
+              <Wrench className="h-5 w-5 text-amber-600 dark:text-amber-400" />
+            </div>
+            <div>
+              <h1 className="font-heading text-2xl font-bold text-[hsl(var(--foreground))]">
+                Maintenance
+              </h1>
+              <p className="text-sm text-[hsl(var(--muted-foreground))]">
+                Track and manage maintenance tasks for your home items.
+              </p>
+            </div>
+          </div>
         </div>
         <div className="flex gap-2">
           <Button variant="outline" onClick={() => setAutopilotOpen(true)} className="gap-2">
@@ -155,7 +161,7 @@ export default function MaintenancePage() {
           <TabsTrigger value="upcoming">
             Upcoming
             {filteredTasks.upcoming.length > 0 && (
-              <span className="ml-1.5 rounded-full bg-teal-500/10 px-1.5 py-0.5 text-[10px] font-bold text-teal-600">
+              <span className="ml-1.5 rounded-full bg-amber-500/10 px-1.5 py-0.5 text-[10px] font-bold text-amber-600">
                 {filteredTasks.upcoming.length}
               </span>
             )}
@@ -176,7 +182,7 @@ export default function MaintenancePage() {
           <TabsContent key={tabKey} value={tabKey}>
             {loading ? (
               <div className="flex items-center justify-center py-20">
-                <Loader2 className="h-6 w-6 animate-spin text-teal-500" />
+                <Loader2 className="h-6 w-6 animate-spin text-amber-500" />
               </div>
             ) : currentTasks.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-20 text-center">

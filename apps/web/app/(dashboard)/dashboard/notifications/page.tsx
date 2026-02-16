@@ -102,11 +102,11 @@ export default function NotificationsPage() {
   }
 
   return (
-    <div className="mx-auto max-w-3xl space-y-6 px-4 py-6 sm:px-6">
+    <div className="mx-auto max-w-3xl space-y-6">
       <div>
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-teal-500/10">
-            <Bell className="h-5 w-5 text-teal-500" />
+          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-500/10">
+            <Bell className="h-5 w-5 text-blue-600 dark:text-blue-400" />
           </div>
           <div>
             <h1 className="font-heading text-2xl font-bold text-[hsl(var(--foreground))]">
@@ -144,7 +144,7 @@ export default function NotificationsPage() {
       {filtered.length === 0 ? (
         <Card>
           <CardContent className="flex flex-col items-center py-16">
-            <CheckCheck className="h-12 w-12 text-teal-500" />
+            <CheckCheck className="h-12 w-12 text-blue-500" />
             <h3 className="mt-4 font-heading text-lg font-semibold">
               All caught up!
             </h3>
@@ -162,7 +162,7 @@ export default function NotificationsPage() {
             const inner = (
               <Card
                 className={`transition-colors hover:bg-[hsl(var(--muted))]/30 ${
-                  !n.read ? "border-teal-500/30 bg-teal-500/5" : ""
+                  !n.read ? "border-blue-500/30 bg-blue-500/5" : ""
                 }`}
               >
                 <CardContent className="flex items-start gap-3 p-4">

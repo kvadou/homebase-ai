@@ -77,13 +77,19 @@ export default function SafetyPage() {
     <div className="space-y-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="flex items-center gap-2 text-2xl font-bold text-[hsl(var(--foreground))]">
-            <Shield className="h-6 w-6 text-teal-500" />
-            Emergency &amp; Safety Hub
-          </h1>
-          <p className="mt-1 text-sm text-[hsl(var(--muted-foreground))]">
-            Document shut-off locations, emergency contacts, and evacuation plans.
-          </p>
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-red-500/10">
+              <Shield className="h-5 w-5 text-red-600 dark:text-red-400" />
+            </div>
+            <div>
+              <h1 className="font-heading text-2xl font-bold text-[hsl(var(--foreground))]">
+                Emergency &amp; Safety Hub
+              </h1>
+              <p className="text-sm text-[hsl(var(--muted-foreground))]">
+                Shut-off locations, emergency contacts, and evacuation plans.
+              </p>
+            </div>
+          </div>
         </div>
 
         {homes.length > 1 && (
@@ -104,7 +110,7 @@ export default function SafetyPage() {
 
       {loading ? (
         <div className="flex items-center justify-center py-20">
-          <Loader2 className="h-6 w-6 animate-spin text-teal-500" />
+          <Loader2 className="h-6 w-6 animate-spin text-red-500" />
         </div>
       ) : !selectedHome ? (
         <div className="flex flex-col items-center justify-center py-20 text-center">

@@ -41,23 +41,26 @@ export default function TimelinePage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">
-        <Loader2 className="h-6 w-6 animate-spin text-teal-500" />
+        <Loader2 className="h-6 w-6 animate-spin text-indigo-500" />
       </div>
     );
   }
 
   return (
-    <div className="mx-auto max-w-4xl space-y-6 px-4 py-6 sm:px-6">
+    <div className="mx-auto max-w-4xl space-y-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="flex items-center gap-2 text-2xl font-bold text-[hsl(var(--foreground))]">
-            <Clock className="h-6 w-6 text-teal-500" />
-            Home Timeline
-          </h1>
-          <p className="mt-1 text-sm text-[hsl(var(--muted-foreground))]">
-            A chronological history of your home events, purchases, and
-            maintenance.
-          </p>
+        <div className="flex items-center gap-3">
+          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-500/10">
+            <Clock className="h-5 w-5 text-indigo-500" />
+          </div>
+          <div>
+            <h1 className="font-heading text-2xl font-bold text-[hsl(var(--foreground))]">
+              Timeline
+            </h1>
+            <p className="text-sm text-[hsl(var(--muted-foreground))]">
+              Chronological history of events, purchases, and maintenance.
+            </p>
+          </div>
         </div>
         {homes.length > 1 && (
           <Select value={selectedHome} onValueChange={setSelectedHome}>

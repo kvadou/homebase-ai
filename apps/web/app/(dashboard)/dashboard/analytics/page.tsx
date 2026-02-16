@@ -108,14 +108,18 @@ export default function AnalyticsPage() {
     <div className="space-y-6">
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="flex items-center gap-2 text-2xl font-bold text-[hsl(var(--foreground))]">
-            <BarChart3 className="h-6 w-6 text-teal-500" />
-            Analytics
-          </h1>
-          <p className="mt-1 text-sm text-[hsl(var(--muted-foreground))]">
-            Home health insights and spending trends.
-          </p>
+        <div className="flex items-center gap-3">
+          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-violet-500/10">
+            <BarChart3 className="h-5 w-5 text-violet-600 dark:text-violet-400" />
+          </div>
+          <div>
+            <h1 className="font-heading text-2xl font-bold text-[hsl(var(--foreground))]">
+              Analytics
+            </h1>
+            <p className="text-sm text-[hsl(var(--muted-foreground))]">
+              Home health insights and spending trends.
+            </p>
+          </div>
         </div>
         {homes.length > 1 && (
           <Select value={selectedHome} onValueChange={setSelectedHome}>
@@ -137,7 +141,7 @@ export default function AnalyticsPage() {
       {/* Loading state */}
       {loading && (
         <div className="flex items-center justify-center py-20">
-          <Loader2 className="h-8 w-8 animate-spin text-teal-500" />
+          <Loader2 className="h-8 w-8 animate-spin text-violet-500" />
         </div>
       )}
 
@@ -160,83 +164,60 @@ export default function AnalyticsPage() {
       {analytics && !loading && (
         <>
           {/* Stat cards */}
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium text-[hsl(var(--muted-foreground))]">
-                  Health Score
-                </CardTitle>
-                <Heart className="h-4 w-4 text-teal-500" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">
-                  {analytics.homeHealthScore}
-                  <span className="text-sm font-normal text-[hsl(var(--muted-foreground))]">
-                    /100
-                  </span>
-                </div>
-                <p className="text-xs text-[hsl(var(--muted-foreground))]">
+          <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+            <div className="flex items-center gap-3 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-4">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-rose-500/8 dark:bg-rose-500/15">
+                <Heart className="h-5 w-5 text-rose-600 dark:text-rose-400" />
+              </div>
+              <div>
+                <p className="text-2xl font-bold leading-none">{analytics.homeHealthScore}/100</p>
+                <p className="mt-0.5 text-xs text-[hsl(var(--muted-foreground))]">
                   {analytics.homeHealthScore >= 71
                     ? "Your home is in great shape"
                     : analytics.homeHealthScore >= 41
                       ? "Some areas need attention"
                       : "Immediate attention needed"}
                 </p>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
 
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium text-[hsl(var(--muted-foreground))]">
-                  Maintenance Compliance
-                </CardTitle>
-                <Wrench className="h-4 w-4 text-teal-500" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">
-                  {analytics.maintenanceCompliance}%
-                </div>
-                <p className="text-xs text-[hsl(var(--muted-foreground))]">
+            <div className="flex items-center gap-3 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-4">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-amber-500/8 dark:bg-amber-500/15">
+                <Wrench className="h-5 w-5 text-amber-600 dark:text-amber-400" />
+              </div>
+              <div>
+                <p className="text-2xl font-bold leading-none">{analytics.maintenanceCompliance}%</p>
+                <p className="mt-0.5 text-xs text-[hsl(var(--muted-foreground))]">
                   {analytics._summary.completedTasks} of{" "}
-                  {analytics._summary.totalTasks} tasks completed
+                  {analytics._summary.totalTasks} tasks
                 </p>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
 
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium text-[hsl(var(--muted-foreground))]">
-                  Total Item Value
-                </CardTitle>
-                <DollarSign className="h-4 w-4 text-teal-500" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">
-                  {formatDollar(analytics.totalItemValue)}
-                </div>
-                <p className="text-xs text-[hsl(var(--muted-foreground))]">
+            <div className="flex items-center gap-3 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-4">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-emerald-500/8 dark:bg-emerald-500/15">
+                <DollarSign className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
+              </div>
+              <div>
+                <p className="text-2xl font-bold leading-none">{formatDollar(analytics.totalItemValue)}</p>
+                <p className="mt-0.5 text-xs text-[hsl(var(--muted-foreground))]">
                   {analytics._summary.totalItems} items tracked
                 </p>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
 
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium text-[hsl(var(--muted-foreground))]">
-                  Warranty Coverage
-                </CardTitle>
-                <Shield className="h-4 w-4 text-teal-500" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">
-                  {analytics.warrantyFreshness}%
-                </div>
-                <p className="text-xs text-[hsl(var(--muted-foreground))]">
+            <div className="flex items-center gap-3 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-4">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-violet-500/8 dark:bg-violet-500/15">
+                <Shield className="h-5 w-5 text-violet-600 dark:text-violet-400" />
+              </div>
+              <div>
+                <p className="text-2xl font-bold leading-none">{analytics.warrantyFreshness}%</p>
+                <p className="mt-0.5 text-xs text-[hsl(var(--muted-foreground))]">
                   {analytics._summary.itemsWithActiveWarranty} of{" "}
-                  {analytics._summary.itemsWithWarranty} warranties active
+                  {analytics._summary.itemsWithWarranty} active
                 </p>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           </div>
 
           {/* Health Score Ring + Score Breakdown */}
@@ -244,7 +225,7 @@ export default function AnalyticsPage() {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-lg font-semibold">
-                  <Activity className="h-5 w-5 text-teal-500" />
+                  <Activity className="h-5 w-5 text-rose-500" />
                   Home Health
                 </CardTitle>
               </CardHeader>
@@ -279,7 +260,7 @@ export default function AnalyticsPage() {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-lg font-semibold">
-                  <Package className="h-5 w-5 text-teal-500" />
+                  <Package className="h-5 w-5 text-violet-500" />
                   Category Breakdown
                 </CardTitle>
               </CardHeader>
@@ -293,7 +274,7 @@ export default function AnalyticsPage() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-lg font-semibold">
-                <TrendingUp className="h-5 w-5 text-teal-500" />
+                <TrendingUp className="h-5 w-5 text-emerald-500" />
                 Monthly Spending
               </CardTitle>
             </CardHeader>
@@ -306,7 +287,7 @@ export default function AnalyticsPage() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-lg font-semibold">
-                <Wrench className="h-5 w-5 text-teal-500" />
+                <Wrench className="h-5 w-5 text-amber-500" />
                 Maintenance Trends
               </CardTitle>
             </CardHeader>
@@ -332,7 +313,7 @@ function ScoreBreakdownRow({
   const getBarColor = (v: number) => {
     if (v <= 40) return "bg-red-500";
     if (v <= 70) return "bg-amber-500";
-    return "bg-teal-500";
+    return "bg-[#00B4A0]";
   };
 
   return (
