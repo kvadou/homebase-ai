@@ -73,7 +73,7 @@ function HeroSection() {
             <Button
               size="xl"
               variant="outline"
-              className="border-white/20 text-white hover:bg-white/10 w-full sm:w-auto"
+              className="border-white/20 bg-transparent text-white hover:bg-white/10 w-full sm:w-auto"
               asChild
             >
               <Link href="#how-it-works">See How It Works</Link>

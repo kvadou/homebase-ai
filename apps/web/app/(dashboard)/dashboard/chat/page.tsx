@@ -173,7 +173,7 @@ export default function ChatPage() {
   const selectedHome = homes.find((h) => h.id === selectedHomeId);
 
   return (
-    <div className="-m-4 flex h-[calc(100dvh-4rem)] sm:-m-6 lg:-m-8">
+    <div className="-m-4 flex h-[calc(100dvh-7.5rem)] sm:-m-6 lg:-m-8 lg:h-[calc(100dvh-4rem)]">
       {/* Mobile overlay backdrop */}
       {sidebarOpen && (
         <div
