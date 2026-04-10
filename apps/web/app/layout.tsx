@@ -1,3 +1,4 @@
+import "@/env";
 import type { Metadata, Viewport } from "next";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Inter, Plus_Jakarta_Sans, JetBrains_Mono } from "next/font/google";
